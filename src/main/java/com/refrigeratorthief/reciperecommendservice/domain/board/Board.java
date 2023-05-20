@@ -1,7 +1,9 @@
-package com.refrigeratorthief.reciperecommendservice.domain;
+package com.refrigeratorthief.reciperecommendservice.domain.board;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.refrigeratorthief.reciperecommendservice.domain.category.Category;
+import com.refrigeratorthief.reciperecommendservice.domain.Member.Member;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -45,10 +47,19 @@ public class Board {
     private LocalDateTime updatedDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "CATEGORY_CATEGORY_IDX", nullable = false)
+    @JoinColumn(name = "CATEGORY_CATEGORY_IDX", nullable = false)
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "USER_USER_ID", length = 45, nullable = false)
-    private User user;
+    @JoinColumn(name = "MEMBER_MEMBER_ID", nullable = false)
+    private Member member;
+
+    public void updateBoard (Board board) {
+        this.title = board.getTitle();
+        this.content = board.getContent();
+        this.img = board.getImg();
+        this.type = board.getType();
+        this.category = board.getCategory();
+        this.member = board.getMember();
+    }
 }

@@ -1,5 +1,6 @@
 package com.refrigeratorthief.reciperecommendservice.domain;
 
+import com.refrigeratorthief.reciperecommendservice.domain.Member.Member;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,11 +30,11 @@ public class Refrigerator {
     private String location;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @Column(name = "USER_USER_ID", length = 45, nullable = false)
-    private User user;
+    @JoinColumn(name = "MEMBER_MEMBER_ID", nullable = false)
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "INGREDIENT_INGREDIENT_IDX", nullable = false)
+    @JoinColumn(name = "INGREDIENT_INGREDIENT_IDX", nullable = false)
     private Ingredient ingredient;
 
 }

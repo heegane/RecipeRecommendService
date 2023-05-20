@@ -28,6 +28,6 @@ public class Ingredient {
     private String img;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "INGREDIENT_UNIT_INGREDIENT_UNIT_IDX", nullable = false)
+    @JoinColumn(name = "INGREDIENT_UNIT_INGREDIENT_UNIT_IDX", nullable = false)
     private IngredientUnit unit;
 }
