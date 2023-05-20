@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardAddControllerResponseDto {
+    private String title;
     private Integer id;
     private String content;
     private String img;

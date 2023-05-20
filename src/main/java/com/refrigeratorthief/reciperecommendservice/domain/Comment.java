@@ -2,7 +2,7 @@ package com.refrigeratorthief.reciperecommendservice.domain;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.refrigeratorthief.reciperecommendservice.domain.User.User;
+import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import com.refrigeratorthief.reciperecommendservice.domain.board.Board;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BoardServiceResponseDto {
     private Integer id;
+    private String title;
     private String content;
     private String img;
     private String type;
@@ -23,6 +24,7 @@ public class BoardServiceResponseDto {
     public BoardControllerResponseDto toControllerDto(BoardServiceResponseDto boardServiceResponseDto) {
         return BoardControllerResponseDto.builder()
                 .id(boardServiceResponseDto.getId())
+                .title(boardServiceResponseDto.getTitle())
                 .content(boardServiceResponseDto.getContent())
                 .img(boardServiceResponseDto.getImg())
                 .type(boardServiceResponseDto.getType())

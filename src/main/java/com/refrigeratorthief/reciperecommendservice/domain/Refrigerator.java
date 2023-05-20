@@ -1,6 +1,6 @@
 package com.refrigeratorthief.reciperecommendservice.domain;
 
-import com.refrigeratorthief.reciperecommendservice.domain.User.User;
+import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import lombok.*;
 
 import javax.persistence.*;

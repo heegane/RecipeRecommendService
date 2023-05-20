@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BoardUpdateServiceResponseDto {
     private Integer id;
+    private String title;
     private String content;
     private String img;
     private String type;

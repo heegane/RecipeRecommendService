@@ -3,7 +3,7 @@ package com.refrigeratorthief.reciperecommendservice.domain.board;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.refrigeratorthief.reciperecommendservice.domain.category.Category;
-import com.refrigeratorthief.reciperecommendservice.domain.User.User;
+import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -60,6 +60,7 @@ public class Board {
         this.img = board.getImg();
         this.type = board.getType();
         this.category = board.getCategory();
+        this.updatedDateTime = board.getUpdatedDateTime();
         this.user = board.getUser();
     }
 }

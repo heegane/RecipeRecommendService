@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("api/v1/board")
+@RequestMapping("/api/v1/board")
 @RestController
 public class BoardController {
 
     private final BoardService boardService;
 
     // 게시글 저장
-    @RequestMapping()
+    @PostMapping()
     public ResponseEntity<BoardAddControllerResponseDto> addBoard(@RequestBody BoardAddControllerRequestDto boardAddControllerRequestDto) {
         BoardAddServiceResponseDto boardAddServiceResponseDto = boardService.addBoard(boardAddControllerRequestDto.toServiceDto(boardAddControllerRequestDto));
         return ResponseEntity.ok(boardAddServiceResponseDto.toControllerDto(boardAddServiceResponseDto));
@@ -39,6 +39,7 @@ public class BoardController {
     @PutMapping()
     public ResponseEntity<MessageDto> updateBoard(@RequestBody BoardUpdateControllerRequestDto boardUpdateControllerRequestDto) {
         BoardUpdateServiceResponseDto boardUpdateServiceResponseDto = boardService.updateBoard(boardUpdateControllerRequestDto.toServiceDto(boardUpdateControllerRequestDto));
+//        boardService.updateBoard(boardUpdateControllerRequestDto.toServiceDto(boardUpdateControllerRequestDto));
         return ResponseEntity.ok(new MessageDto("해당 게시글을 성공적으로 수정했습니다."));
     }
 

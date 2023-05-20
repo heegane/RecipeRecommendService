@@ -1,4 +1,4 @@
-package com.refrigeratorthief.reciperecommendservice.domain.User;
+package com.refrigeratorthief.reciperecommendservice.domain.user;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardAddControllerRequestDto {
+    private String title;
     private String content;
     private String img;
     private String type;
@@ -21,6 +22,7 @@ public class BoardAddControllerRequestDto {
 
     public BoardAddServiceRequestDto toServiceDto(BoardAddControllerRequestDto boardAddControllerRequestDto) {
         return BoardAddServiceRequestDto.builder()
+                .title(boardAddControllerRequestDto.getTitle())
                 .content(boardAddControllerRequestDto.getContent())
                 .img(boardAddControllerRequestDto.getImg())
                 .type(boardAddControllerRequestDto.getType())

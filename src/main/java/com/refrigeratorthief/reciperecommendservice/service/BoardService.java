@@ -1,7 +1,7 @@
 package com.refrigeratorthief.reciperecommendservice.service;
 
-import com.refrigeratorthief.reciperecommendservice.domain.User.User;
-import com.refrigeratorthief.reciperecommendservice.domain.User.UserRepository;
+import com.refrigeratorthief.reciperecommendservice.domain.user.User;
+import com.refrigeratorthief.reciperecommendservice.domain.user.UserRepository;
 import com.refrigeratorthief.reciperecommendservice.domain.category.Category;
 import com.refrigeratorthief.reciperecommendservice.domain.board.Board;
 import com.refrigeratorthief.reciperecommendservice.domain.board.BoardRepository;
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +33,12 @@ public class BoardService {
         User targetUser = userRepository.findById(boardAddServiceRequestDto.getUser()).orElseThrow(NullPointerException::new);
 
         Board targetBoard = Board.builder()
+                .title(boardAddServiceRequestDto.getTitle())
                 .content(boardAddServiceRequestDto.getContent())
                 .img(boardAddServiceRequestDto.getImg())
                 .type(boardAddServiceRequestDto.getType())
-                .createdDateTime(boardAddServiceRequestDto.getCreatedDateTime())
-                .updatedDateTime(boardAddServiceRequestDto.getUpdatedDateTime())
+                .createdDateTime(LocalDateTime.now())
+                .updatedDateTime(LocalDateTime.now())
                 .category(targetCategory)
                 .user(targetUser)
                 .build();
@@ -45,8 +47,15 @@ public class BoardService {
 
         return BoardAddServiceResponseDto.builder()
                 .id(targetBoard.getId())
+                .title(targetBoard.getTitle())
+                .content(targetBoard.getContent())
+                .img(targetBoard.getImg())
+                .type(targetBoard.getType())
+                .createdDateTime(LocalDateTime.now())
+                .updatedDateTime(LocalDateTime.now())
+                .category(targetBoard.getCategory().getName())
+                .user(targetBoard.getUser().getName())
                 .build();
-
     }
 
     // 게시글 상세 정보 조회
@@ -57,6 +66,7 @@ public class BoardService {
 
         return BoardServiceResponseDto.builder()
                 .id(targetBoard.getId())
+                .title(targetBoard.getTitle())
                 .content(targetBoard.getContent())
                 .img(targetBoard.getImg())
                 .type(targetBoard.getType())
@@ -73,23 +83,31 @@ public class BoardService {
         Board targetBoard = boardRepository.findById(boardUpdateServiceRequestDto.getId()).orElseThrow(NullPointerException::new);
         Category targetCategory = categoryRepository.findByName(boardUpdateServiceRequestDto.getCategory()).orElseThrow(NullPointerException::new);
         User targetUser = userRepository.findById(boardUpdateServiceRequestDto.getUser()).orElseThrow(NullPointerException::new);
+
         Board resultBoard = Board.builder()
                 .id(targetBoard.getId())
+                .title(boardUpdateServiceRequestDto.getTitle())
                 .content(boardUpdateServiceRequestDto.getContent())
                 .img(boardUpdateServiceRequestDto.getImg())
                 .type(boardUpdateServiceRequestDto.getType())
+                .createdDateTime(boardUpdateServiceRequestDto.getCreatedDateTime())
+                .updatedDateTime(LocalDateTime.now())
                 .category(targetCategory)
                 .user(targetUser)
                 .build();
+
         targetBoard.updateBoard(resultBoard);
 
         return BoardUpdateServiceResponseDto.builder()
                 .id(resultBoard.getId())
+                .title(resultBoard.getTitle())
                 .content(resultBoard.getContent())
                 .img(resultBoard.getImg())
                 .type(resultBoard.getType())
+                .createdDateTime(resultBoard.getCreatedDateTime())
+                .updatedDateTime(LocalDateTime.now())
                 .category(resultBoard.getCategory().getName())
-                .user(resultBoard.getUser().getId())
+                .user(resultBoard.getUser().getName())
                 .build();
     }
 
@@ -117,11 +135,14 @@ public class BoardService {
         for (Board boards : targetBoards) {
             BoardServiceResponseDto dto = BoardServiceResponseDto.builder()
                     .id(boards.getId())
+                    .title(boards.getTitle())
                     .content(boards.getContent())
                     .img(boards.getImg())
                     .type(boards.getType())
+                    .createdDateTime(boards.getCreatedDateTime())
+                    .updatedDateTime(boards.getUpdatedDateTime())
                     .category(boards.getCategory().getName())
-                    .user(boards.getUser().getId())
+                    .user(boards.getUser().getName())
                     .build();
             dtoList.add(dto);
         }
