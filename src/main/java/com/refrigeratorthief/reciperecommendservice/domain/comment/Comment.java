@@ -1,7 +1,9 @@
-package com.refrigeratorthief.reciperecommendservice.domain;
+package com.refrigeratorthief.reciperecommendservice.domain.comment;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.refrigeratorthief.reciperecommendservice.domain.user.User;
+import com.refrigeratorthief.reciperecommendservice.domain.board.Board;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -22,10 +24,10 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "COMMENT_IDX")
-    private int id;
+    private Integer id;
 
     @Column(name = "COMMENT_UPPER")
-    private int upperId;
+    private Integer upperId;
 
     @Column(name = "COMMENT_CONTENT", length = 100, nullable = false)
     private String content;
@@ -39,10 +41,10 @@ public class Comment {
     private LocalDateTime updatedDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "USER_USER_ID", length = 45, nullable = false)
+    @JoinColumn(name = "USER_USER_ID", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "BOARD_BOARD_IDX",nullable = false)
+    @JoinColumn(name = "BOARD_BOARD_IDX",nullable = false)
     private Board board;
 }
