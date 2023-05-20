@@ -17,7 +17,7 @@ public class BoardAddControllerRequestDto {
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
     private String category;
-    private String member;
+    private String user;
 
     public BoardAddServiceRequestDto toServiceDto(BoardAddControllerRequestDto boardAddControllerRequestDto) {
         return BoardAddServiceRequestDto.builder()
@@ -27,7 +27,7 @@ public class BoardAddControllerRequestDto {
                 .createdDateTime(boardAddControllerRequestDto.getCreatedDateTime())
                 .updatedDateTime(boardAddControllerRequestDto.getUpdatedDateTime())
                 .category(boardAddControllerRequestDto.getCategory())
-                .member(boardAddControllerRequestDto.getMember())
+                .user(boardAddControllerRequestDto.getUser())
                 .build();
     }
 }

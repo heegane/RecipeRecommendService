@@ -12,5 +12,5 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     Optional<Board> findById(Integer id);
 
     @Query(value = "SELECT u FROM BOARD AS u WHERE u.category.id = ?1")
-    Optional<List<Board>> findBoardsByCategory(int id);
+    Optional<List<Board>> findBoardsByCategory(Integer id);
 }

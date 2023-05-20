@@ -16,5 +16,5 @@ public class BoardAddServiceRequestDto {
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
     private String category;
-    private String member;
+    private String user;
 }

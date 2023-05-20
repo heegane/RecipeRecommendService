@@ -51,7 +51,7 @@ public class BoardController {
 
     // 카테고리별 조회
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<BoardServiceResponseDto>> findBoardsByCategory(@PathVariable int categoryId) {
+    public ResponseEntity<List<BoardServiceResponseDto>> findBoardsByCategory(@PathVariable Integer categoryId) {
         List<BoardServiceResponseDto> boardServiceResponseDtoList = boardService.findBoardsByCategory(categoryId);
         return ResponseEntity.ok(boardServiceResponseDtoList);
     }

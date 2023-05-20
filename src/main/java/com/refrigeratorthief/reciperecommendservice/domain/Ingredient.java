@@ -19,7 +19,7 @@ public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "INGREDIENT_IDX")
-    private int id;
+    private Integer id;
 
     @Column(name = "INGREDIENT_NM", length = 45, nullable = false, unique = true)
     private String name;

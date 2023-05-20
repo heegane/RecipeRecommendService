@@ -1,4 +1,4 @@
-package com.refrigeratorthief.reciperecommendservice.domain.Member;
+package com.refrigeratorthief.reciperecommendservice.domain.User;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -14,23 +14,23 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity(name = "MEMBER")
+@Entity(name = "USER")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class Member {
+public class User {
 
     @Id
-    @Column(name = "MEMBER_ID", length = 45, nullable = false, unique = true)
+    @Column(name = "USER_ID", length = 45, nullable = false, unique = true)
     private String id;
 
-    @Column(name = "MEMBER_NM", length = 20, nullable = false, unique = true)
+    @Column(name = "USER_NM", length = 20, nullable = false, unique = true)
     private String name;
 
-    @Column(name = "MEMBER_PW", length = 45, nullable = false)
+    @Column(name = "USER_PW", length = 45, nullable = false)
     private String pw;
 
-    @Column(name = "MEMBER_CITY", length = 20, nullable = false)
+    @Column(name = "USER_CITY", length = 20, nullable = false)
     private String city;
 
-    @Column(name = "MEMBER_DONG", length = 20, nullable = false)
+    @Column(name = "USER_DONG", length = 20, nullable = false)
     private String dong;
 }

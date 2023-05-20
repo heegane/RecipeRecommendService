@@ -17,5 +17,5 @@ public class BoardAddControllerResponseDto {
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
     private String category;
-    private String member;
+    private String user;
 }

@@ -18,7 +18,7 @@ public class BoardUpdateControllerRequestDto {
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
     private String category;
-    private String member;
+    private String user;
 
     public BoardUpdateServiceRequestDto toServiceDto(BoardUpdateControllerRequestDto boardUpdateControllerRequestDto) {
         return  BoardUpdateServiceRequestDto.builder()
@@ -27,7 +27,7 @@ public class BoardUpdateControllerRequestDto {
                 .img(boardUpdateControllerRequestDto.getImg())
                 .type(boardUpdateControllerRequestDto.getType())
                 .category(boardUpdateControllerRequestDto.getCategory())
-                .member(boardUpdateControllerRequestDto.getMember())
+                .user(boardUpdateControllerRequestDto.getUser())
                 .build();
     }
 }

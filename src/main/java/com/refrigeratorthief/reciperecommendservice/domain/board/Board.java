@@ -3,7 +3,7 @@ package com.refrigeratorthief.reciperecommendservice.domain.board;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.refrigeratorthief.reciperecommendservice.domain.category.Category;
-import com.refrigeratorthief.reciperecommendservice.domain.Member.Member;
+import com.refrigeratorthief.reciperecommendservice.domain.User.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -51,8 +51,8 @@ public class Board {
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_MEMBER_ID", nullable = false)
-    private Member member;
+    @JoinColumn(name = "USER_USER_ID", nullable = false)
+    private User user;
 
     public void updateBoard (Board board) {
         this.title = board.getTitle();
@@ -60,6 +60,6 @@ public class Board {
         this.img = board.getImg();
         this.type = board.getType();
         this.category = board.getCategory();
-        this.member = board.getMember();
+        this.user = board.getUser();
     }
 }

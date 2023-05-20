@@ -18,7 +18,7 @@ public class BoardServiceResponseDto {
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
     private String category;
-    private String member;
+    private String user;
 
     public BoardControllerResponseDto toControllerDto(BoardServiceResponseDto boardServiceResponseDto) {
         return BoardControllerResponseDto.builder()
@@ -29,7 +29,7 @@ public class BoardServiceResponseDto {
                 .createdDateTime(boardServiceResponseDto.getCreatedDateTime())
                 .updatedDateTime(boardServiceResponseDto.getUpdatedDateTime())
                 .category(boardServiceResponseDto.getCategory())
-                .member(boardServiceResponseDto.getMember())
+                .user(boardServiceResponseDto.getUser())
                 .build();
     }
 
