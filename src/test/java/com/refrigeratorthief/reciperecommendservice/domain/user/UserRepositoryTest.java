@@ -54,14 +54,14 @@ public class UserRepositoryTest {
         //given
         User targetUser = testUtils.getTestUser();
         targetUser.setId("TEST");
-        targetUser.setName("테스트2");
+        targetUser.setName("테스트");
 
         //when
         User result = userRepository.save(targetUser);
 
         //then
         assertEquals("TEST",result.getId());
-        assertEquals("테스트2",result.getName());
+        assertEquals("테스트",result.getName());
         assertEquals(targetUser.getPw(),result.getPw());
         assertEquals(targetUser.getCity(),result.getCity());
         assertEquals(targetUser.getDong(), result.getDong());

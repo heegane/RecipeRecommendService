@@ -6,6 +6,7 @@ import com.refrigeratorthief.reciperecommendservice.dto.user.serviceDto.UserDele
 import com.refrigeratorthief.reciperecommendservice.dto.user.serviceDto.UserLoginRequestServiceDto;
 import com.refrigeratorthief.reciperecommendservice.dto.user.serviceDto.UserRegisterRequestServiceDto;
 import com.refrigeratorthief.reciperecommendservice.dto.user.serviceDto.UserResponseServiceDto;
+import com.refrigeratorthief.reciperecommendservice.utils.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserResponseServiceDto findById(String id) {
         User targetUser = userRepository.findUserById(id)
-                .orElseThrow(()->new IllegalArgumentException(""));
+                .orElseThrow(()->new CustomException("해당하는 id가 없습니다. id를 다시 확인해주세요!"));
 
         return new UserResponseServiceDto(targetUser);
     }
@@ -39,15 +40,15 @@ public class UserService {
     public String register(UserRegisterRequestServiceDto userRegisterRequestServiceDto){
 
         if(userRepository.existsUserById(userRegisterRequestServiceDto.getId())) {
-            throw new IllegalArgumentException("동일한 id가 존재합니다!");
+            throw new CustomException("동일한 id가 존재합니다!");
         }
 
         if(userRepository.existsUserByName(userRegisterRequestServiceDto.getName())) {
-            throw new IllegalArgumentException("동일한 닉네임이 존재합니다!");
+            throw new CustomException("동일한 닉네임이 존재합니다!");
         }
 
         if(!Objects.equals(userRegisterRequestServiceDto.getPw(), userRegisterRequestServiceDto.getCheckPw())) {
-            throw new IllegalArgumentException("비밀번호를 다시 확인해주세요!");
+            throw new CustomException("비밀번호를 다시 확인해주세요!");
         }
 
         return userRepository.save(userRegisterRequestServiceDto.toEntity()).getName();
@@ -58,10 +59,10 @@ public class UserService {
     public String login(UserLoginRequestServiceDto userLoginRequestServiceDto){
 
         User targetUser = userRepository.findUserById(userLoginRequestServiceDto.getId())
-                .orElseThrow(()->new IllegalArgumentException("해당하는 id가 없습니다. id를 다시 확인해주세요!"));
+                .orElseThrow(()->new CustomException("해당하는 id가 없습니다. id를 다시 확인해주세요!"));
 
         if(!Objects.equals(targetUser.getPw(), userLoginRequestServiceDto.getPw())){
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요!");
+            throw new CustomException("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요!");
         }
 
         return targetUser.getName();
@@ -72,10 +73,14 @@ public class UserService {
     public String delete(UserDeleteRequestServiceDto userDeleteRequestServiceDto){
 
         User targetUser = userRepository.findUserById(userDeleteRequestServiceDto.getId())
-                .orElseThrow(()->new IllegalArgumentException("해당하는 id가 없습니다. id를 다시 확인해주세요!"));
+                .orElseThrow(()->new CustomException("해당하는 id가 없습니다. id를 다시 확인해주세요!"));
+
+        if(!Objects.equals(userDeleteRequestServiceDto.getPw(), userDeleteRequestServiceDto.getCheckPw())) {
+            throw new CustomException("비밀번호를 다시 확인해주세요!");
+        }
 
         if(!Objects.equals(targetUser.getPw(), userDeleteRequestServiceDto.getPw())){
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요!");
+            throw new CustomException("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요!");
         }
 
         userRepository.delete(targetUser);
