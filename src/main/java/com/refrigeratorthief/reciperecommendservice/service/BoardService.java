@@ -126,7 +126,7 @@ public class BoardService {
         }
 
         Board targetBoard = boardRepository.findById(id)
-                .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
+                .orElseThrow(()->new CustomException("해당하는 게시글이 존재하지 않습니다."));
         boardRepository.delete(targetBoard);
 
         return BoardDeleteServiceResponseDto.builder()

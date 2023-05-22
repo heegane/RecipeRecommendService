@@ -1,5 +1,6 @@
 package com.refrigeratorthief.reciperecommendservice.domain.user;
 
+import com.refrigeratorthief.reciperecommendservice.domain.category.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,5 +1,6 @@
-package com.refrigeratorthief.reciperecommendservice.domain;
+package com.refrigeratorthief.reciperecommendservice.domain.refrigerator;
 
+import com.refrigeratorthief.reciperecommendservice.domain.ingredient.Ingredient;
 import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import lombok.*;
 
@@ -37,4 +38,11 @@ public class Refrigerator {
     @JoinColumn(name = "INGREDIENT_INGREDIENT_IDX", nullable = false)
     private Ingredient ingredient;
 
+    public void updateFridge(Refrigerator refrigerator) {
+        this.expirationDate = refrigerator.getExpirationDate();
+        this.quantity = refrigerator.getQuantity();
+        this.location = refrigerator.getLocation();
+        this.user = refrigerator.getUser();
+        this.ingredient = refrigerator.getIngredient();
+    }
 }
