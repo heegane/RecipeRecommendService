@@ -7,6 +7,7 @@ import com.refrigeratorthief.reciperecommendservice.domain.board.Board;
 import com.refrigeratorthief.reciperecommendservice.domain.board.BoardRepository;
 import com.refrigeratorthief.reciperecommendservice.domain.category.CategoryRepository;
 import com.refrigeratorthief.reciperecommendservice.dto.board.serviceDto.*;
+import com.refrigeratorthief.reciperecommendservice.utils.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,10 @@ public class BoardService {
     // 게시글 저장
     @Transactional
     public BoardAddServiceResponseDto addBoard(BoardAddServiceRequestDto boardAddServiceRequestDto) {
-        Category targetCategory = categoryRepository.findByName(boardAddServiceRequestDto.getCategory()).orElseThrow(NullPointerException::new);
-        User targetUser = userRepository.findById(boardAddServiceRequestDto.getUser()).orElseThrow(NullPointerException::new);
+        Category targetCategory = categoryRepository.findByName(boardAddServiceRequestDto.getCategory())
+                .orElseThrow(()->new CustomException("해당하는 카테고리가 존재하지 않습니다."));
+        User targetUser = userRepository.findById(boardAddServiceRequestDto.getUser())
+                .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
 
         Board targetBoard = Board.builder()
                 .title(boardAddServiceRequestDto.getTitle())
@@ -62,7 +65,8 @@ public class BoardService {
     @Transactional(readOnly = true)
     public BoardServiceResponseDto getBoard(Integer id) {
 
-        Board targetBoard = boardRepository.findById(id).orElseThrow(NullPointerException::new);
+        Board targetBoard = boardRepository.findById(id)
+                .orElseThrow(()->new CustomException("해당하는 게시글이 존재하지 않습니다."));
 
         return BoardServiceResponseDto.builder()
                 .id(targetBoard.getId())
@@ -80,9 +84,12 @@ public class BoardService {
     // 게시글 수정
     @Transactional
     public BoardUpdateServiceResponseDto updateBoard(BoardUpdateServiceRequestDto boardUpdateServiceRequestDto) {
-        Board targetBoard = boardRepository.findById(boardUpdateServiceRequestDto.getId()).orElseThrow(NullPointerException::new);
-        Category targetCategory = categoryRepository.findByName(boardUpdateServiceRequestDto.getCategory()).orElseThrow(NullPointerException::new);
-        User targetUser = userRepository.findById(boardUpdateServiceRequestDto.getUser()).orElseThrow(NullPointerException::new);
+        Board targetBoard = boardRepository.findById(boardUpdateServiceRequestDto.getId())
+                .orElseThrow(()->new CustomException("해당하는 게시글이 존재하지 않습니다."));
+        Category targetCategory = categoryRepository.findByName(boardUpdateServiceRequestDto.getCategory())
+                .orElseThrow(()->new CustomException("해당하는 카테고리가 존재하지 않습니다."));
+        User targetUser = userRepository.findById(boardUpdateServiceRequestDto.getUser())
+                .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
 
         Board resultBoard = Board.builder()
                 .id(targetBoard.getId())
@@ -115,10 +122,11 @@ public class BoardService {
     @Transactional
     public BoardDeleteServiceResponseDto deleteBoard(Integer id) {
         if (boardRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException("해당하는 idx값을 가진 게시글이 존재하지 않습니다.");
+            throw new CustomException("해당하는 게시글이 존재하지 않습니다.");
         }
 
-        Board targetBoard = boardRepository.findById(id).orElseThrow(NullPointerException::new);
+        Board targetBoard = boardRepository.findById(id)
+                .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
         boardRepository.delete(targetBoard);
 
         return BoardDeleteServiceResponseDto.builder()
@@ -129,7 +137,8 @@ public class BoardService {
     // 카테고리별 조회
     @Transactional(readOnly = true)
     public List<BoardServiceResponseDto> findBoardsByCategory(Integer id) {
-        List<Board> targetBoards = boardRepository.findBoardsByCategory(id).orElseThrow(NullPointerException::new);
+        List<Board> targetBoards = boardRepository.findBoardsByCategory(id)
+                .orElseThrow(()->new CustomException("해당하는 게시글이 존재하지 않습니다."));
         List<BoardServiceResponseDto> dtoList = new ArrayList<>();
 
         for (Board boards : targetBoards) {
