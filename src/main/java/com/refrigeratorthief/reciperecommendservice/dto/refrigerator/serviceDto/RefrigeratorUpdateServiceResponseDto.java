@@ -14,6 +14,14 @@ public class RefrigeratorUpdateServiceResponseDto {
     private Date expirationDate;
     private Integer quantity;
     private String location;
-    private String user;
-    private Integer ingredient;
+
+    private String userId;
+    private String userName;
+
+    private Integer ingredientId;
+    private String ingredientName;
+    private String ingredientImg;
+
+    private Integer ingredientUnitId;
+    private String ingredientUnitName;
 }

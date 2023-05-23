@@ -17,8 +17,8 @@ public class RefrigeratorUpdateControllerRequestDto {
     private Date expirationDate;
     private Integer quantity;
     private String location;
-    private String user;
-    private Integer ingredient;
+    private String userId;
+    private Integer ingredientId;
 
     public RefrigeratorUpdateServiceRequestDto toServiceDto(RefrigeratorUpdateControllerRequestDto refrigeratorUpdateControllerRequestDto) {
         return  RefrigeratorUpdateServiceRequestDto.builder()
@@ -26,8 +26,8 @@ public class RefrigeratorUpdateControllerRequestDto {
                 .expirationDate(refrigeratorUpdateControllerRequestDto.getExpirationDate())
                 .quantity(refrigeratorUpdateControllerRequestDto.getQuantity())
                 .location(refrigeratorUpdateControllerRequestDto.getLocation())
-                .user(refrigeratorUpdateControllerRequestDto.getUser())
-                .ingredient(refrigeratorUpdateControllerRequestDto.getIngredient())
+                .userId(refrigeratorUpdateControllerRequestDto.getUserId())
+                .ingredientId(refrigeratorUpdateControllerRequestDto.getIngredientId())
                 .build();
     }
 }

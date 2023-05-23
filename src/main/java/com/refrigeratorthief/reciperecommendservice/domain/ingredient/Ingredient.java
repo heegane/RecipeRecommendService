@@ -2,7 +2,7 @@ package com.refrigeratorthief.reciperecommendservice.domain.ingredient;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.refrigeratorthief.reciperecommendservice.domain.IngredientUnit;
+import com.refrigeratorthief.reciperecommendservice.domain.ingredientUnit.IngredientUnit;
 import lombok.*;
 
 import javax.persistence.*;

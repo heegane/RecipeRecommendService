@@ -1,4 +1,4 @@
-package com.refrigeratorthief.reciperecommendservice.domain;
+package com.refrigeratorthief.reciperecommendservice.domain.ingredientUnit;
 
 import lombok.*;
 

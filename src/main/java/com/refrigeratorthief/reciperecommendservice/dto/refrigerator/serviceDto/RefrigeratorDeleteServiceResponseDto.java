@@ -14,12 +14,10 @@ import java.util.Date;
 @AllArgsConstructor
 public class RefrigeratorDeleteServiceResponseDto {
     private Integer id;
-    private String user;
 
     public RefrigeratorDeleteControllerResponseDto toControllerDto(RefrigeratorDeleteServiceResponseDto refrigeratorDeleteServiceResponseDto) {
         return RefrigeratorDeleteControllerResponseDto.builder()
                 .id(refrigeratorDeleteServiceResponseDto.getId())
-                .user(refrigeratorDeleteServiceResponseDto.getUser())
                 .build();
     }
 }

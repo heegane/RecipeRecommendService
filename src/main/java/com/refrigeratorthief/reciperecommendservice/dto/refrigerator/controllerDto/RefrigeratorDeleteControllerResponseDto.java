@@ -9,5 +9,4 @@ import lombok.*;
 @AllArgsConstructor
 public class RefrigeratorDeleteControllerResponseDto {
     private Integer id;
-    private String user;
 }

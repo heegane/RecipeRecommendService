@@ -15,8 +15,16 @@ public class RefrigeratorServiceResponseDto {
     private Date expirationDate;
     private Integer quantity;
     private String location;
-    private String user;
-    private Integer ingredient;
+
+    private String userId;
+    private String userName;
+
+    private Integer ingredientId;
+    private String ingredientName;
+    private String ingredientImg;
+
+    private Integer ingredientUnitId;
+    private String ingredientUnitName;
 
     public RefrigeratorControllerResponseDto toControllerDto(RefrigeratorServiceResponseDto refrigeratorServiceResponseDto) {
         return RefrigeratorControllerResponseDto.builder()
@@ -24,8 +32,13 @@ public class RefrigeratorServiceResponseDto {
                 .expirationDate(refrigeratorServiceResponseDto.getExpirationDate())
                 .quantity(refrigeratorServiceResponseDto.getQuantity())
                 .location(refrigeratorServiceResponseDto.getLocation())
-                .user(refrigeratorServiceResponseDto.getUser())
-                .ingredient(refrigeratorServiceResponseDto.getIngredient())
+                .userId(refrigeratorServiceResponseDto.getUserId())
+                .userName(refrigeratorServiceResponseDto.getUserName())
+                .ingredientId(refrigeratorServiceResponseDto.getIngredientId())
+                .ingredientName(refrigeratorServiceResponseDto.getIngredientName())
+                .ingredientImg(refrigeratorServiceResponseDto.getIngredientImg())
+                .ingredientUnitId(refrigeratorServiceResponseDto.getIngredientUnitId())
+                .ingredientUnitName(refrigeratorServiceResponseDto.getIngredientUnitName())
                 .build();
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @RequiredArgsConstructor
 @Service
@@ -39,16 +40,21 @@ public class RefrigeratorService {
                 .expirationDate(targetRefri.getExpirationDate())
                 .quantity(targetRefri.getQuantity())
                 .location(targetRefri.getLocation())
-                .user(targetRefri.getUser().getName())
-                .ingredient(targetRefri.getIngredient().getId())
+                .userId(targetRefri.getUser().getId())
+                .userName(targetRefri.getUser().getName())
+                .ingredientId(targetRefri.getIngredient().getId())
+                .ingredientName(targetRefri.getIngredient().getName())
+                .ingredientImg(targetRefri.getIngredient().getImg())
+                .ingredientUnitId(targetRefri.getIngredient().getUnit().getId())
+                .ingredientUnitName(targetRefri.getIngredient().getUnit().getName())
                 .build();
     }
 
     @Transactional
     public RefrigeratorAddServiceResponseDto addFridge(RefrigeratorAddServiceRequestDto refrigeratorAddServiceRequestDto) {
-        Ingredient targetIngredient = ingredientRepository.findById(refrigeratorAddServiceRequestDto.getIngredient())
+        Ingredient targetIngredient = ingredientRepository.findById(refrigeratorAddServiceRequestDto.getIngredientId())
                 .orElseThrow(()->new CustomException("해당하는 재료가 존재하지 않습니다."));
-        User targetUser = userRepository.findById(refrigeratorAddServiceRequestDto.getUser())
+        User targetUser = userRepository.findById(refrigeratorAddServiceRequestDto.getUserId())
                 .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
 
         Refrigerator targetRefri = Refrigerator.builder()
@@ -66,16 +72,21 @@ public class RefrigeratorService {
                 .expirationDate(targetRefri.getExpirationDate())
                 .quantity(targetRefri.getQuantity())
                 .location(targetRefri.getLocation())
-                .user(targetRefri.getUser().getName())
-                .ingredient(targetRefri.getIngredient().getId())
+                .userId(targetRefri.getUser().getId())
+                .userName(targetRefri.getUser().getName())
+                .ingredientId(targetRefri.getIngredient().getId())
+                .ingredientName(targetRefri.getIngredient().getName())
+                .ingredientImg(targetRefri.getIngredient().getImg())
+                .ingredientUnitId(targetRefri.getIngredient().getUnit().getId())
+                .ingredientUnitName(targetRefri.getIngredient().getUnit().getName())
                 .build();
     }
 
     @Transactional
     public RefrigeratorUpdateServiceResponseDto updateFridge(RefrigeratorUpdateServiceRequestDto refrigeratorUpdateServiceRequestDto) {
-        Ingredient targetIngredient = ingredientRepository.findById(refrigeratorUpdateServiceRequestDto.getIngredient())
+        Ingredient targetIngredient = ingredientRepository.findById(refrigeratorUpdateServiceRequestDto.getIngredientId())
                 .orElseThrow(()->new CustomException("해당하는 재료가 존재하지 않습니다."));
-        User targetUser = userRepository.findById(refrigeratorUpdateServiceRequestDto.getUser())
+        User targetUser = userRepository.findById(refrigeratorUpdateServiceRequestDto.getUserId())
                 .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
         Refrigerator targetRefri = refrigeratorRepository.findById(refrigeratorUpdateServiceRequestDto.getId())
                 .orElseThrow(()->new CustomException("해당하는 냉장고가 존재하지 않습니다."));
@@ -96,8 +107,13 @@ public class RefrigeratorService {
                 .expirationDate(resultFridge.getExpirationDate())
                 .quantity(resultFridge.getQuantity())
                 .location(resultFridge.getLocation())
-                .user(resultFridge.getUser().getName())
-                .ingredient(resultFridge.getIngredient().getId())
+                .userId(resultFridge.getUser().getId())
+                .userName(resultFridge.getUser().getName())
+                .ingredientId(resultFridge.getIngredient().getId())
+                .ingredientName(resultFridge.getIngredient().getName())
+                .ingredientImg(resultFridge.getIngredient().getImg())
+                .ingredientUnitId(resultFridge.getIngredient().getUnit().getId())
+                .ingredientUnitName(resultFridge.getIngredient().getUnit().getName())
                 .build();
     }
 
@@ -112,7 +128,6 @@ public class RefrigeratorService {
 
         return RefrigeratorDeleteServiceResponseDto.builder()
                 .id(targetRefri.getId())
-                .user(targetRefri.getUser().getName())
                 .build();
     }
 }

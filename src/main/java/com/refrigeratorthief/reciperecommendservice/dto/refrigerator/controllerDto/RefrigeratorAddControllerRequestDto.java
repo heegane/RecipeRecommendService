@@ -15,16 +15,16 @@ public class RefrigeratorAddControllerRequestDto {
     private Date expirationDate;
     private Integer quantity;
     private String location;
-    private String user;
-    private Integer ingredient;
+    private String userId;
+    private Integer ingredientId;
 
     public RefrigeratorAddServiceRequestDto toServiceDto(RefrigeratorAddControllerRequestDto refrigeratorAddControllerRequestDto) {
         return RefrigeratorAddServiceRequestDto.builder()
                 .expirationDate(refrigeratorAddControllerRequestDto.getExpirationDate())
                 .quantity(refrigeratorAddControllerRequestDto.getQuantity())
                 .location(refrigeratorAddControllerRequestDto.getLocation())
-                .user(refrigeratorAddControllerRequestDto.getUser())
-                .ingredient(refrigeratorAddControllerRequestDto.getIngredient())
+                .userId(refrigeratorAddControllerRequestDto.getUserId())
+                .ingredientId(refrigeratorAddControllerRequestDto.getIngredientId())
                 .build();
     }
 }
