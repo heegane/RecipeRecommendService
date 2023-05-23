@@ -1,4 +1,4 @@
-package com.refrigeratorthief.reciperecommendservice.domain;
+package com.refrigeratorthief.reciperecommendservice.domain.ingredientUnit;
 
 import lombok.*;
 
@@ -16,7 +16,7 @@ public class IngredientUnit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "INGREDIENT_UNIT_IDX")
-    private int id;
+    private Integer id;
 
     @Column(name = "INGREDIENT_UNIT_NM", length = 10, nullable = false, unique = true)
     private String name;

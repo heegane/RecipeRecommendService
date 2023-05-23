@@ -1,5 +1,7 @@
-package com.refrigeratorthief.reciperecommendservice.domain;
+package com.refrigeratorthief.reciperecommendservice.domain.refreigerator;
 
+import com.refrigeratorthief.reciperecommendservice.domain.user.User;
+import com.refrigeratorthief.reciperecommendservice.domain.ingredient.Ingredient;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,17 +25,17 @@ public class Refrigerator {
     private Date expirationDate;
 
     @Column(name = "REFRIGERATOR_QUANTITY", nullable = false)
-    private int quantity;
+    private Integer quantity;
 
     @Column(name = "REFRIGERATOR_STORE_LOCATION", length = 2, nullable = false)
     private String location;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @Column(name = "USER_USER_ID", length = 45, nullable = false)
+    @JoinColumn(name = "USER_USER_ID", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "INGREDIENT_INGREDIENT_IDX", nullable = false)
+    @JoinColumn(name = "INGREDIENT_INGREDIENT_IDX", nullable = false)
     private Ingredient ingredient;
 
 }
