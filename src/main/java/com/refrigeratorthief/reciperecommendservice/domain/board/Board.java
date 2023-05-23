@@ -53,4 +53,14 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_USER_ID", nullable = false)
     private User user;
+
+    public void updateBoard (Board board) {
+        this.title = board.getTitle();
+        this.content = board.getContent();
+        this.img = board.getImg();
+        this.type = board.getType();
+        this.category = board.getCategory();
+        this.updatedDateTime = board.getUpdatedDateTime();
+        this.user = board.getUser();
+    }
 }
