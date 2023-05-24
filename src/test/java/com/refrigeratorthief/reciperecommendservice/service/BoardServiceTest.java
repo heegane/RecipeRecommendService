@@ -113,8 +113,10 @@ class BoardServiceTest {
 
         //then
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(result, Objects.requireNonNull(result));
-        verify(boardRepository).findById(any());
+        Assertions.assertEquals("수정된 타이틀", result.getTitle());
+        verify(categoryRepository).findByName(any());
+        verify(userRepository).findById(any());
+        verify(boardRepository).findById(targetBoard.getId());
     }
 
     @Test
