@@ -30,9 +30,9 @@ public class BoardService {
     // 게시글 저장
     @Transactional
     public BoardAddServiceResponseDto addBoard(BoardAddServiceRequestDto boardAddServiceRequestDto) {
-        Category targetCategory = categoryRepository.findByName(boardAddServiceRequestDto.getCategory())
+        Category targetCategory = categoryRepository.findByName(boardAddServiceRequestDto.getCategory().getName())
                 .orElseThrow(()->new CustomException("해당하는 카테고리가 존재하지 않습니다."));
-        User targetUser = userRepository.findById(boardAddServiceRequestDto.getUser())
+        User targetUser = userRepository.findById(boardAddServiceRequestDto.getUser().getId())
                 .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
 
         Board targetBoard = Board.builder()
@@ -86,9 +86,9 @@ public class BoardService {
     public BoardUpdateServiceResponseDto updateBoard(BoardUpdateServiceRequestDto boardUpdateServiceRequestDto) {
         Board targetBoard = boardRepository.findById(boardUpdateServiceRequestDto.getId())
                 .orElseThrow(()->new CustomException("해당하는 게시글이 존재하지 않습니다."));
-        Category targetCategory = categoryRepository.findByName(boardUpdateServiceRequestDto.getCategory())
+        Category targetCategory = categoryRepository.findByName(boardUpdateServiceRequestDto.getCategory().getName())
                 .orElseThrow(()->new CustomException("해당하는 카테고리가 존재하지 않습니다."));
-        User targetUser = userRepository.findById(boardUpdateServiceRequestDto.getUser())
+        User targetUser = userRepository.findById(boardUpdateServiceRequestDto.getUser().getId())
                 .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
 
         Board resultBoard = Board.builder()

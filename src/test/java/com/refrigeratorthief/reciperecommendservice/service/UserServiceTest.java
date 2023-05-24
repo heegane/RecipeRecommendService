@@ -70,7 +70,6 @@ public class UserServiceTest {
         Assertions.assertNotNull(result);
         Assertions.assertEquals(result.toString(), Objects.requireNonNull(result).toString());
         verify(userRepository).findUserById(testId);
-
     }
 
     @Test

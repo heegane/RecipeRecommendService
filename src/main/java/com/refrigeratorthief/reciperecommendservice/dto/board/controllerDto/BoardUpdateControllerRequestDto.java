@@ -1,5 +1,7 @@
 package com.refrigeratorthief.reciperecommendservice.dto.board.controllerDto;
 
+import com.refrigeratorthief.reciperecommendservice.domain.category.Category;
+import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import com.refrigeratorthief.reciperecommendservice.dto.board.serviceDto.BoardUpdateServiceRequestDto;
 import lombok.*;
 
@@ -18,7 +20,7 @@ public class BoardUpdateControllerRequestDto {
     private String type;
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
-    private String category;
+    private Integer category;
     private String user;
 
     public BoardUpdateServiceRequestDto toServiceDto(BoardUpdateControllerRequestDto boardUpdateControllerRequestDto) {
@@ -28,8 +30,8 @@ public class BoardUpdateControllerRequestDto {
                 .content(boardUpdateControllerRequestDto.getContent())
                 .img(boardUpdateControllerRequestDto.getImg())
                 .type(boardUpdateControllerRequestDto.getType())
-                .category(boardUpdateControllerRequestDto.getCategory())
-                .user(boardUpdateControllerRequestDto.getUser())
+                .category(Category.builder().id(category).build())
+                .user(User.builder().id(user).build())
                 .build();
     }
 }
