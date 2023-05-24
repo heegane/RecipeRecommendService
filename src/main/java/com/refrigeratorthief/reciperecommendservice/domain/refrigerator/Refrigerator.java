@@ -1,5 +1,7 @@
 package com.refrigeratorthief.reciperecommendservice.domain.refrigerator;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.refrigeratorthief.reciperecommendservice.domain.ingredient.Ingredient;
 import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import lombok.*;
@@ -14,6 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Entity(name = "REFRIGERATOR")
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Refrigerator {
 
     @Id
