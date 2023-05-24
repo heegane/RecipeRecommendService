@@ -1,5 +1,6 @@
 package com.refrigeratorthief.reciperecommendservice.domain.board;
 
+import com.refrigeratorthief.reciperecommendservice.TestUtils;
 import com.refrigeratorthief.reciperecommendservice.domain.category.Category;
 import com.refrigeratorthief.reciperecommendservice.domain.category.CategoryRepository;
 import com.refrigeratorthief.reciperecommendservice.domain.user.User;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,39 +23,35 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-//@ActiveProfiles("test")
+@ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ExtendWith(SpringExtension.class)
 @Transactional
 @DataJpaTest
 class BoardRepositoryTest {
+    private final TestUtils testUtils = new TestUtils();
 
     @Autowired
-    private BoardRepository boardRepository;
+    private UserRepository userRepository;
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
-    private UserRepository userRepository;
-
+    private BoardRepository boardRepository;
     @Test
     void save() {
         //given
-        Category category = new Category(10, "사요");
-        Category testCategory = categoryRepository.save(category);
-        User user = new User("testId", "yun", "123", "사랑시 고백구", "행복동");
-        User testUser = userRepository.save(user);
-        Board board = new Board(1, "제목", "내용", "img", "거래", LocalDateTime.now(), LocalDateTime.now(), testCategory, testUser);
+        Board targetBoard = testUtils.getTestBoard();
 
         //when
-        Board testBoard = boardRepository.save(board);
+        Board result = boardRepository.save(targetBoard);
 
         //then
-        assertEquals("제목",testBoard.getTitle());
-        assertEquals("내용",testBoard.getContent());
-        assertEquals("img",testBoard.getImg());
-        assertEquals("거래",testBoard.getType());
-        assertEquals(testCategory,testBoard.getCategory());
-        assertEquals(testUser,testBoard.getUser());
+        assertEquals(targetBoard.getTitle(), result.getTitle());
+        assertEquals(targetBoard.getContent(),result.getContent());
+        assertEquals(targetBoard.getImg(),result.getImg());
+        assertEquals(targetBoard.getType(),result.getType());
+        assertEquals(targetBoard.getCategory().getName(),result.getCategory().getName());
+        assertEquals(targetBoard.getUser().getId(),result.getUser().getId());
     }
 
     @Test
