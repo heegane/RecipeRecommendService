@@ -1,5 +1,7 @@
 package com.refrigeratorthief.reciperecommendservice;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.refrigeratorthief.reciperecommendservice.domain.board.Board;
 import com.refrigeratorthief.reciperecommendservice.domain.category.Category;
 import com.refrigeratorthief.reciperecommendservice.domain.ingredient.Ingredient;
@@ -30,6 +32,7 @@ public class TestUtils {
     private final User testUser;
     private final User testUser2;
     private final LocalDateTime testDateTime = LocalDateTime.parse("2023-05-05 11:11:11", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
     private final LocalDateTime testDateTime2 = LocalDateTime.parse("2023-05-20 23:13:02", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     private final LocalDateTime testDateTime3 = LocalDateTime.parse("2022-05-05 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 

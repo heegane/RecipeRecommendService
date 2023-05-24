@@ -1,7 +1,6 @@
 package com.refrigeratorthief.reciperecommendservice.dto.board.serviceDto;
 
 import com.refrigeratorthief.reciperecommendservice.dto.board.controllerDto.BoardAddControllerResponseDto;
-import com.refrigeratorthief.reciperecommendservice.dto.board.controllerDto.BoardControllerResponseDto;
 import lombok.*;
 
 import java.time.LocalDateTime;

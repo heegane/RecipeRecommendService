@@ -125,7 +125,7 @@ public class UserControllerTest {
 
         //when
         ResultActions result = mvc.perform(
-                        RestDocumentationRequestBuilders.post("/api/v1/user/register")
+                RestDocumentationRequestBuilders.post("/api/v1/user/register")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(userRegisterRequestControllerDto))
                                 .accept(MediaType.APPLICATION_JSON))

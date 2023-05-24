@@ -30,7 +30,7 @@ public class BoardService {
     // 게시글 저장
     @Transactional
     public BoardAddServiceResponseDto addBoard(BoardAddServiceRequestDto boardAddServiceRequestDto) {
-        Category targetCategory = categoryRepository.findByName(boardAddServiceRequestDto.getCategory().getName())
+        Category targetCategory = categoryRepository.findById(boardAddServiceRequestDto.getCategory().getId())
                 .orElseThrow(()->new CustomException("해당하는 카테고리가 존재하지 않습니다."));
         User targetUser = userRepository.findById(boardAddServiceRequestDto.getUser().getId())
                 .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
