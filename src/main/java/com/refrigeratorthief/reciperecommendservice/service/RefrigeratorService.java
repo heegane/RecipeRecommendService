@@ -30,6 +30,8 @@ public class RefrigeratorService {
     @Autowired
     private final IngredientRepository ingredientRepository;
 
+
+    //TODO userId로 인자 받아서 해당하는 재료 아이템 List로 반환하게 하기
     @Transactional(readOnly = true)
     public RefrigeratorServiceResponseDto getRefrigerator(Integer id) {
         Refrigerator targetRefri = refrigeratorRepository.findById(id)
@@ -119,9 +121,7 @@ public class RefrigeratorService {
 
     @Transactional
     public RefrigeratorDeleteServiceResponseDto deleteFridge(Integer id) {
-        if (refrigeratorRepository.findById(id).isEmpty()) {
-            throw new CustomException("해당하는 냉장고가 존재하지 않습니다.");
-        }
+
         Refrigerator targetRefri = refrigeratorRepository.findById(id)
                 .orElseThrow(()->new CustomException("해당하는 냉장고가 존재하지 않습니다."));
         refrigeratorRepository.delete(targetRefri);

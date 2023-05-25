@@ -40,14 +40,14 @@ public class RefrigeratorController {
     // 냉장고 재료 수정
     @PutMapping()
     public ResponseEntity<MessageDto> updateFridge(@RequestBody RefrigeratorUpdateControllerRequestDto refrigeratorUpdateControllerRequestDto) {
-        RefrigeratorUpdateServiceResponseDto refrigeratorUpdateServiceResponseDto = refrigeratorService.updateFridge(refrigeratorUpdateControllerRequestDto.toServiceDto(refrigeratorUpdateControllerRequestDto));
+        refrigeratorService.updateFridge(refrigeratorUpdateControllerRequestDto.toServiceDto(refrigeratorUpdateControllerRequestDto));
         return ResponseEntity.ok(new MessageDto("해당 냉장고 재료 정보를 성공적으로 수정했습니다."));
     }
 
     // 냉장고 재료 삭제
      @DeleteMapping("/{id}")
      public ResponseEntity<MessageDto> deleteFridge(@PathVariable Integer id) {
-        RefrigeratorDeleteServiceResponseDto refrigeratorDeleteServiceResponseDto = refrigeratorService.deleteFridge(id);
+        refrigeratorService.deleteFridge(id);
         return ResponseEntity.ok(new MessageDto("냉장고에서 해당 재료를 성공적으로 삭제했습니다."));
      }
 }
