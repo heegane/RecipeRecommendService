@@ -17,7 +17,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Ref;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,17 +43,25 @@ class RefrigeratorServiceTest {
     private final TestUtils testUtils = new TestUtils();
 
     @Test
-    void getRefrigerator() {
+    void getRefrigeratorAll() {
         //given
-        Refrigerator targetRef = testUtils.getTestRef();
-        doReturn(Optional.of(targetRef)).when(refrigeratorRepository).findById(targetRef.getId());
+        User testUser = testUtils.getTestUser();
+        String userId = testUtils.getTestUser().getId();
+        List<Refrigerator> testList = new ArrayList<>();
+
+        testList.add(testUtils.getTestRef2());
+        testList.add(testUtils.getTestRef3());
+
+        doReturn(Optional.of(testUser)).when(userRepository).findById(userId);
+        doReturn(Optional.of(testList)).when(refrigeratorRepository).findAllByUser(testUser);
 
         //when
-        RefrigeratorServiceResponseDto result = refrigeratorService.getRefrigerator(targetRef.getId());
+        List<RefrigeratorServiceResponseDto> results = refrigeratorService.getRefrigeratorAll(userId);
 
         //then
-        Assertions.assertNotNull(result);
-        verify(refrigeratorRepository).findById(targetRef.getId());
+        Assertions.assertNotNull(results);
+        Assertions.assertEquals(testList.stream().map(RefrigeratorServiceResponseDto::new).collect(Collectors.toList()).toString(), Objects.requireNonNull(results).toString());
+        verify(refrigeratorRepository).findAllByUser(testUser);
     }
 
     @Test

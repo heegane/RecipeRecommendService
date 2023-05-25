@@ -30,7 +30,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -68,6 +73,56 @@ public class RefrigeratorControllerTest {
 
     @AfterEach
     void tearDown() {
+    }
+
+    @Test
+    void getFridge() throws Exception {
+        //given
+        String userId = testUtils.getTestUser().getId();
+        List<RefrigeratorServiceResponseDto> targetFridgeList = new ArrayList<RefrigeratorServiceResponseDto>();
+
+        RefrigeratorServiceResponseDto targetFridgeDto1 = new RefrigeratorServiceResponseDto(testUtils.getTestRef2());
+        targetFridgeList.add(targetFridgeDto1);
+
+        RefrigeratorServiceResponseDto targetFridgeDto2 = new RefrigeratorServiceResponseDto(testUtils.getTestRef3());
+        targetFridgeList.add(targetFridgeDto2);
+
+        doReturn(targetFridgeList).when(refrigeratorService).getRefrigeratorAll(userId);
+
+        //when
+        ResultActions result = mvc.perform(
+                        RestDocumentationRequestBuilders.get("/api/v1/fridge/{userId}",userId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("fridge-get-all",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("userId").description("조회할 냉장고의 주인 유저 id")
+                        ),
+                        responseFields(
+                                fieldWithPath("[].id").description("조회된 냉장고-재료 id (PK)"),
+                                fieldWithPath("[].ingredientId").description("조회된 냉장고의 재료 id"),
+                                fieldWithPath("[].ingredientName").description("조회된 냉장고의 재료 이름"),
+                                fieldWithPath("[].ingredientImg").description("조회된 냉장고의 재료 사진"),
+                                fieldWithPath("[].ingredientUnitId").description("조회된 냉장고의 재료 단위 id"),
+                                fieldWithPath("[].ingredientUnitName").description("조회된 냉장고의 재료 단위 이름"),
+                                fieldWithPath("[].quantity").description("조회된 냉장고의 재료 수량"),
+                                fieldWithPath("[].expirationDate").description("조회된 냉장고의 재료 소비기한"),
+                                fieldWithPath("[].location").description("조회된 냉장고의 재료 저장 장소 (냉장/냉동/실온)"),
+                                fieldWithPath("[].userId").description("해당 냉장고의 유저 id"),
+                                fieldWithPath("[].userName").description("해당 냉장고의 유저 닉네임")
+                        )
+                ));
+
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(content().json(
+                        objectMapper.writeValueAsString(targetFridgeList.stream()
+                                .map(RefrigeratorServiceResponseDto::toControllerDto)
+                                .collect(Collectors.toList()))));
+        verify(refrigeratorService).getRefrigeratorAll(userId);
     }
 
     @Test
@@ -111,7 +166,7 @@ public class RefrigeratorControllerTest {
                                 fieldWithPath("userId").description("해당 냉장고의 유저 id"),
                                 fieldWithPath("ingredientId").description("해당 냉장고에 추가한 재료의 id"),
                                 fieldWithPath("expirationDate").description("해당 냉장고에 추가한 재료의 소비기한"),
-                                fieldWithPath("quantity").description("해당 냉장고에 추가한 재료의 양"),
+                                fieldWithPath("quantity").description("해당 냉장고에 추가한 재료의 수량"),
                                 fieldWithPath("location").description("해당 냉장고에 추가한 재료 저장 장소 (냉장/냉동/실온)")
                         ),
                         responseFields(
@@ -121,7 +176,7 @@ public class RefrigeratorControllerTest {
                                 fieldWithPath("ingredientImg").description("냉장고에 추가된 재료의 사진"),
                                 fieldWithPath("ingredientUnitId").description("냉장고에 추가된 재료의 단위 id"),
                                 fieldWithPath("ingredientUnitName").description("냉장고에 추가된 재료의 단위 이름"),
-                                fieldWithPath("quantity").description("냉장고에 추가된 재료의 양"),
+                                fieldWithPath("quantity").description("냉장고에 추가된 재료의 수량"),
                                 fieldWithPath("expirationDate").description("냉장고에 추가된 재료의 소비기한"),
                                 fieldWithPath("location").description("냉장고에 추가된 재료의 저장 장소 (냉장/냉동/실온)"),
                                 fieldWithPath("userId").description("해당 냉장고의 유저 id"),

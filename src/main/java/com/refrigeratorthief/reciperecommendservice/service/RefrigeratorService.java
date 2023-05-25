@@ -8,6 +8,7 @@ import com.refrigeratorthief.reciperecommendservice.domain.refrigerator.Refriger
 import com.refrigeratorthief.reciperecommendservice.domain.refrigerator.RefrigeratorRepository;
 import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import com.refrigeratorthief.reciperecommendservice.domain.user.UserRepository;
+import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.serviceDto.RefrigeratorServiceResponseDto;
 import com.refrigeratorthief.reciperecommendservice.dto.board.serviceDto.BoardAddServiceResponseDto;
 import com.refrigeratorthief.reciperecommendservice.dto.board.serviceDto.BoardDeleteServiceResponseDto;
 import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.serviceDto.*;
@@ -19,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -31,25 +34,18 @@ public class RefrigeratorService {
     private final IngredientRepository ingredientRepository;
 
 
-    //TODO userId로 인자 받아서 해당하는 재료 아이템 List로 반환하게 하기
+    // userId로 인자 받아서 해당하는 냉장고 속의 모든 재료 아이템 List로 반환
     @Transactional(readOnly = true)
-    public RefrigeratorServiceResponseDto getRefrigerator(Integer id) {
-        Refrigerator targetRefri = refrigeratorRepository.findById(id)
-                .orElseThrow(()->new CustomException("해당하는 냉장고가 존재하지 않습니다."));
+    public List<RefrigeratorServiceResponseDto> getRefrigeratorAll(String userId) {
 
-        return RefrigeratorServiceResponseDto.builder()
-                .id(targetRefri.getId())
-                .expirationDate(targetRefri.getExpirationDate())
-                .quantity(targetRefri.getQuantity())
-                .location(targetRefri.getLocation())
-                .userId(targetRefri.getUser().getId())
-                .userName(targetRefri.getUser().getName())
-                .ingredientId(targetRefri.getIngredient().getId())
-                .ingredientName(targetRefri.getIngredient().getName())
-                .ingredientImg(targetRefri.getIngredient().getImg())
-                .ingredientUnitId(targetRefri.getIngredient().getUnit().getId())
-                .ingredientUnitName(targetRefri.getIngredient().getUnit().getName())
-                .build();
+        User targetUser = userRepository.findById(userId)
+                .orElseThrow(()->new CustomException("해당하는 유저 id가 존재하지 않습니다."));
+
+        return refrigeratorRepository.findAllByUser(targetUser)
+                .orElseThrow(()->new CustomException("해당하는 냉장고가 존재하지 않습니다."))
+                .stream()
+                .map(RefrigeratorServiceResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional

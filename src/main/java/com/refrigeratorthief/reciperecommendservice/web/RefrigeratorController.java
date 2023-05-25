@@ -16,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/fridge")
 @RestController
@@ -24,10 +27,17 @@ public class RefrigeratorController {
     private final RefrigeratorService refrigeratorService;
 
     // 냉장고 재료 조회
-    @GetMapping("/{id}")
-    public ResponseEntity<RefrigeratorControllerResponseDto> findById(@PathVariable Integer id) {
-        RefrigeratorServiceResponseDto refrigeratorServiceResponseDto = refrigeratorService.getRefrigerator(id);
-        return ResponseEntity.ok(refrigeratorServiceResponseDto.toControllerDto(refrigeratorServiceResponseDto));
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<RefrigeratorControllerResponseDto>> getFridgeAllByUserId(@PathVariable String userId) {
+
+        List<RefrigeratorControllerResponseDto> results;
+
+        results = refrigeratorService.getRefrigeratorAll(userId)
+                .stream()
+                .map(RefrigeratorServiceResponseDto::toControllerDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(results);
     }
 
     // 냉장고 재료 추가
