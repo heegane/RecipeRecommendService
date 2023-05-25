@@ -1,6 +1,7 @@
 package com.refrigeratorthief.reciperecommendservice.service;
 
 import com.refrigeratorthief.reciperecommendservice.TestUtils;
+import com.refrigeratorthief.reciperecommendservice.domain.ingredient.Ingredient;
 import com.refrigeratorthief.reciperecommendservice.domain.ingredient.IngredientRepository;
 import com.refrigeratorthief.reciperecommendservice.domain.refrigerator.Refrigerator;
 import com.refrigeratorthief.reciperecommendservice.domain.refrigerator.RefrigeratorRepository;
@@ -17,14 +18,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Ref;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
@@ -98,19 +96,19 @@ class RefrigeratorServiceTest {
     void updateFridge() {
         //given
         Refrigerator targetRef = testUtils.getTestRef();
+        java.sql.Date testDate = java.sql.Date.valueOf("2028-05-05");
 
-        doReturn(Optional.of(targetRef.getIngredient())).when(ingredientRepository).findById(any());
-        doReturn(Optional.of(targetRef.getUser())).when(userRepository).findById(any());
-        doReturn(Optional.of(targetRef)).when(refrigeratorRepository).findById(any());
+        doReturn(Optional.of(targetRef.getUser())).when(userRepository).findUserById(anyString());
+        doReturn(Optional.of(targetRef.getIngredient())).when(ingredientRepository).findById(anyInt());
+        doReturn(Optional.of(targetRef)).when(refrigeratorRepository).findRefrigeratorByUserAndIngredient(any(User.class),any(Ingredient.class));
 
         RefrigeratorUpdateServiceRequestDto refrigeratorUpdateServiceRequestDto = RefrigeratorUpdateServiceRequestDto
                 .builder()
-                .id(targetRef.getId())
-                .expirationDate(targetRef.getExpirationDate())
-                .quantity(targetRef.getQuantity())
+                .expirationDate(testDate)
+                .quantity(100)
                 .location("수정된 위치")
-                .userId(targetRef.getUser().getId())
-                .ingredientId(targetRef.getIngredient().getId())
+                .user(targetRef.getUser())
+                .ingredient(targetRef.getIngredient())
                 .build();
 
         //when
@@ -118,10 +116,12 @@ class RefrigeratorServiceTest {
 
         //then
         Assertions.assertNotNull(result);
+        Assertions.assertEquals(testDate,result.getExpirationDate());
         Assertions.assertEquals("수정된 위치", result.getLocation());
-        verify(ingredientRepository).findById(any());
-        verify(userRepository).findById(any());
-        verify(refrigeratorRepository).findById(any());
+        Assertions.assertEquals(100,result.getQuantity());
+        verify(userRepository).findUserById(anyString());
+        verify(ingredientRepository).findById(anyInt());
+        verify(refrigeratorRepository).findRefrigeratorByUserAndIngredient(any(User.class), any(Ingredient.class));
     }
 
     @Test

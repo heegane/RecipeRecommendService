@@ -6,10 +6,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.refrigeratorthief.reciperecommendservice.TestUtils;
 import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.controllerDto.RefrigeratorAddControllerRequestDto;
 import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.controllerDto.RefrigeratorAddControllerResponseDto;
-import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.serviceDto.RefrigeratorAddServiceRequestDto;
-import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.serviceDto.RefrigeratorAddServiceResponseDto;
-import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.serviceDto.RefrigeratorDeleteServiceResponseDto;
-import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.serviceDto.RefrigeratorServiceResponseDto;
+import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.controllerDto.RefrigeratorUpdateControllerRequestDto;
+import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.serviceDto.*;
 import com.refrigeratorthief.reciperecommendservice.dto.user.controllerDto.UserDeleteRequestControllerDto;
 import com.refrigeratorthief.reciperecommendservice.dto.user.serviceDto.UserDeleteRequestServiceDto;
 import com.refrigeratorthief.reciperecommendservice.dto.user.serviceDto.UserResponseServiceDto;
@@ -222,6 +220,61 @@ public class RefrigeratorControllerTest {
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("냉장고에서 해당 재료를 성공적으로 삭제했습니다."));
         verify(refrigeratorService).deleteFridge(fridgeId);
+    }
+
+    @Test
+    void updateFridge() throws Exception {
+        //given
+        RefrigeratorUpdateControllerRequestDto refrigeratorUpdateControllerRequestDto = RefrigeratorUpdateControllerRequestDto.builder()
+                .userId(testUtils.getTestRef().getUser().getId())
+                .ingredientId(testUtils.getTestRef().getIngredient().getId())
+                .expirationDate(testUtils.getTestRef().getExpirationDate())
+                .quantity(testUtils.getTestRef().getQuantity())
+                .location(testUtils.getTestRef().getLocation())
+                .build();
+
+        RefrigeratorUpdateServiceResponseDto refrigeratorUpdateServiceResponseDto = RefrigeratorUpdateServiceResponseDto.builder()
+                .id(testUtils.getTestRef().getId())
+                .expirationDate(testUtils.getTestRef().getExpirationDate())
+                .quantity(testUtils.getTestRef().getQuantity())
+                .location(testUtils.getTestRef().getLocation())
+                .userId(testUtils.getTestRef().getUser().getId())
+                .userName(testUtils.getTestRef().getUser().getName())
+                .ingredientId(testUtils.getTestRef().getIngredient().getId())
+                .ingredientName(testUtils.getTestRef().getIngredient().getName())
+                .ingredientImg(testUtils.getTestRef().getIngredient().getImg())
+                .ingredientUnitId(testUtils.getTestRef().getIngredient().getUnit().getId())
+                .ingredientUnitName(testUtils.getTestRef().getIngredient().getUnit().getName())
+                .build();
+
+        doReturn(refrigeratorUpdateServiceResponseDto).when(refrigeratorService).updateFridge(any(RefrigeratorUpdateServiceRequestDto.class));
+
+        //when
+        ResultActions result = mvc.perform(
+                        RestDocumentationRequestBuilders.put("/api/v1/fridge")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(refrigeratorUpdateControllerRequestDto))
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("fridge-update",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("userId").description("해당 냉장고의 유저 id"),
+                                fieldWithPath("ingredientId").description("해당 재료의 id"),
+                                fieldWithPath("expirationDate").description("수정할 해당 재료의 소비기한"),
+                                fieldWithPath("quantity").description("수정할 해당 재료의 수량"),
+                                fieldWithPath("location").description("수정할 해당 재료의 저장 장소 (냉장/냉동/실온)")
+                        ),
+                        responseFields(
+                                fieldWithPath("message").description("수정 완료 안내 메시지")
+                        )
+                ));
+
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("해당 냉장고 재료 정보를 성공적으로 수정했습니다."));
+        verify(refrigeratorService).updateFridge(any(RefrigeratorUpdateServiceRequestDto.class));
     }
 
 }

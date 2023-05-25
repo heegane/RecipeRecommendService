@@ -50,7 +50,7 @@ public class RefrigeratorController {
     // 냉장고 재료 수정
     @PutMapping()
     public ResponseEntity<MessageDto> updateFridge(@RequestBody RefrigeratorUpdateControllerRequestDto refrigeratorUpdateControllerRequestDto) {
-        refrigeratorService.updateFridge(refrigeratorUpdateControllerRequestDto.toServiceDto(refrigeratorUpdateControllerRequestDto));
+        refrigeratorService.updateFridge(refrigeratorUpdateControllerRequestDto.toServiceDto());
         return ResponseEntity.ok(new MessageDto("해당 냉장고 재료 정보를 성공적으로 수정했습니다."));
     }
 

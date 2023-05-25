@@ -1,6 +1,7 @@
 package com.refrigeratorthief.reciperecommendservice.domain.refrigerator;
 
 import com.refrigeratorthief.reciperecommendservice.TestUtils;
+import com.refrigeratorthief.reciperecommendservice.domain.ingredient.Ingredient;
 import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -90,5 +91,20 @@ class RefrigeratorRepositoryTest {
 
         //then
         assertThat(testUtils.isListSame(testGoal,results),is(true));
+    }
+
+    @Test
+    void findRefrigeratorByUserAndIngredient() {
+        //given
+        Refrigerator testRef = testUtils.getTestRef2();
+        User testUser = testUtils.getTestUser();
+        Ingredient testIngredient = testUtils.getTestIngredient();
+
+        //when
+        Refrigerator result = refrigeratorRepository.findRefrigeratorByUserAndIngredient(testUser,testIngredient)
+                .orElseThrow(IllegalArgumentException::new);
+
+        //then
+        assertEquals(result.toString(),testRef.toString());
     }
 }
