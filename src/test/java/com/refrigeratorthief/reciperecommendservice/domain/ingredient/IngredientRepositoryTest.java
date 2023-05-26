@@ -46,4 +46,32 @@ class IngredientRepositoryTest {
         //then
         assertEquals(result.toString(), testIng.toString());
     }
+
+    @Test
+    void existsIngredientByName() {
+        //given
+        Ingredient testIngredient = testUtils.getTestIngredient();
+
+        //when
+        boolean result = ingredientRepository.existsIngredientByName(testIngredient.getName());
+
+        //then
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    void save() {
+        //given
+        Ingredient targetIngredient = testUtils.getTestIngredient();
+        targetIngredient.setName("마라탕 소스");
+
+        //when
+        Ingredient result = ingredientRepository.save(targetIngredient);
+
+        //then
+        assertEquals("마라탕 소스",result.getName());
+        assertEquals(targetIngredient.getImg(),result.getImg());
+        assertEquals(targetIngredient.getUnit().getId(), result.getUnit().getId());
+        assertEquals(targetIngredient.getUnit().getName(), result.getUnit().getName());
+    }
 }

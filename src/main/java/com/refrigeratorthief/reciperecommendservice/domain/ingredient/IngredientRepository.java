@@ -12,4 +12,6 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Integer>
     Optional<Ingredient> findById(Integer id);
 
     Optional<Ingredient> findByName(String name);
+
+    boolean existsIngredientByName(String name);
 }
