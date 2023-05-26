@@ -16,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/fridge")
 @RestController
@@ -24,10 +27,17 @@ public class RefrigeratorController {
     private final RefrigeratorService refrigeratorService;
 
     // 냉장고 재료 조회
-    @GetMapping("/{id}")
-    public ResponseEntity<RefrigeratorControllerResponseDto> findById(@PathVariable Integer id) {
-        RefrigeratorServiceResponseDto refrigeratorServiceResponseDto = refrigeratorService.getRefrigerator(id);
-        return ResponseEntity.ok(refrigeratorServiceResponseDto.toControllerDto(refrigeratorServiceResponseDto));
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<RefrigeratorControllerResponseDto>> getFridgeAllByUserId(@PathVariable String userId) {
+
+        List<RefrigeratorControllerResponseDto> results;
+
+        results = refrigeratorService.getRefrigeratorAll(userId)
+                .stream()
+                .map(RefrigeratorServiceResponseDto::toControllerDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(results);
     }
 
     // 냉장고 재료 추가
@@ -40,14 +50,14 @@ public class RefrigeratorController {
     // 냉장고 재료 수정
     @PutMapping()
     public ResponseEntity<MessageDto> updateFridge(@RequestBody RefrigeratorUpdateControllerRequestDto refrigeratorUpdateControllerRequestDto) {
-        RefrigeratorUpdateServiceResponseDto refrigeratorUpdateServiceResponseDto = refrigeratorService.updateFridge(refrigeratorUpdateControllerRequestDto.toServiceDto(refrigeratorUpdateControllerRequestDto));
+        refrigeratorService.updateFridge(refrigeratorUpdateControllerRequestDto.toServiceDto());
         return ResponseEntity.ok(new MessageDto("해당 냉장고 재료 정보를 성공적으로 수정했습니다."));
     }
 
     // 냉장고 재료 삭제
      @DeleteMapping("/{id}")
      public ResponseEntity<MessageDto> deleteFridge(@PathVariable Integer id) {
-        RefrigeratorDeleteServiceResponseDto refrigeratorDeleteServiceResponseDto = refrigeratorService.deleteFridge(id);
+        refrigeratorService.deleteFridge(id);
         return ResponseEntity.ok(new MessageDto("냉장고에서 해당 재료를 성공적으로 삭제했습니다."));
      }
 }

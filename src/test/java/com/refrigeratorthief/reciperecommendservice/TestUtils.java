@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Component
@@ -40,8 +41,12 @@ public class TestUtils {
     private final Board testBoard;
 
     private final IngredientUnit testIngredientUnit;
+    private final IngredientUnit testIngredientUnit2;
     private final Ingredient testIngredient;
+    private final Ingredient testIngredient2;
     private final Refrigerator testRef;
+    private final Refrigerator testRef2;
+    private final Refrigerator testRef3;
 
     public TestUtils() {
 
@@ -80,23 +85,69 @@ public class TestUtils {
                 .build();
 
         testIngredientUnit = IngredientUnit.builder()
-                .id(5)
+                .id(1)
                 .name("개")
+                .build();
+
+        testIngredientUnit2 = IngredientUnit.builder()
+                .id(2)
+                .name("근")
                 .build();
 
         testIngredient = Ingredient.builder()
                 .id(1)
                 .name("당근")
+                .img("carrot.jpg")
                 .unit(testIngredientUnit)
+                .build();
+
+        testIngredient2 = Ingredient.builder()
+                .id(2)
+                .name("소고기")
+                .img("beef.jpg")
+                .unit(testIngredientUnit2)
                 .build();
 
         testRef = Refrigerator.builder()
                 .id(1)
                 .expirationDate(testDate4)
                 .quantity(3)
-                .location("정왕")
+                .location("실온")
                 .user(testUser2)
                 .ingredient(testIngredient)
                 .build();
+
+        testRef2 = Refrigerator.builder()
+                .id(2)
+                .expirationDate(testDate4)
+                .quantity(5)
+                .location("냉장")
+                .user(testUser)
+                .ingredient(testIngredient)
+                .build();
+
+        testRef3 = Refrigerator.builder()
+                .id(3)
+                .expirationDate(testDate4)
+                .quantity(2)
+                .location("냉동")
+                .user(testUser)
+                .ingredient(testIngredient2)
+                .build();
+    }
+
+    public boolean isListSame(List<?> targetListA , List<?> targetListB){
+
+        if(targetListA.size() != targetListB.size()) return false;
+        for (int i = 0; i < targetListA.size(); i++) {
+            try{
+                targetListA.indexOf(targetListB.get(i));
+            }catch (Exception e){
+                logger.debug("{}",targetListA.get(i).toString());
+                logger.debug("{}",targetListB.get(i).toString());
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -1,6 +1,8 @@
 package com.refrigeratorthief.reciperecommendservice.domain.refrigerator;
 
 import com.refrigeratorthief.reciperecommendservice.TestUtils;
+import com.refrigeratorthief.reciperecommendservice.domain.ingredient.Ingredient;
+import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -69,5 +74,37 @@ class RefrigeratorRepositoryTest {
 
         //then
         assertEquals(result.toString(), testRef.toString());
+    }
+
+    @Test
+    void findAllByUser() {
+        //given
+        User testUser = testUtils.getTestUser();
+
+        List<Refrigerator> testGoal = new ArrayList<Refrigerator>();
+        testGoal.add(testUtils.getTestRef2());
+        testGoal.add(testUtils.getTestRef3());
+
+        //when
+        List<Refrigerator> results = refrigeratorRepository.findAllByUser(testUser)
+                .orElseThrow(IllegalArgumentException::new);
+
+        //then
+        assertThat(testUtils.isListSame(testGoal,results),is(true));
+    }
+
+    @Test
+    void findRefrigeratorByUserAndIngredient() {
+        //given
+        Refrigerator testRef = testUtils.getTestRef2();
+        User testUser = testUtils.getTestUser();
+        Ingredient testIngredient = testUtils.getTestIngredient();
+
+        //when
+        Refrigerator result = refrigeratorRepository.findRefrigeratorByUserAndIngredient(testUser,testIngredient)
+                .orElseThrow(IllegalArgumentException::new);
+
+        //then
+        assertEquals(result.toString(),testRef.toString());
     }
 }

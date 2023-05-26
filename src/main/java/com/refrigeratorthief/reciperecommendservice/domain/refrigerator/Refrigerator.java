@@ -41,11 +41,10 @@ public class Refrigerator {
     @JoinColumn(name = "INGREDIENT_INGREDIENT_IDX", nullable = false)
     private Ingredient ingredient;
 
+    // 수량, 소비기한, 보관 장소만 변경 가능
     public void updateFridge(Refrigerator refrigerator) {
-        this.expirationDate = refrigerator.getExpirationDate();
-        this.quantity = refrigerator.getQuantity();
-        this.location = refrigerator.getLocation();
-        this.user = refrigerator.getUser();
-        this.ingredient = refrigerator.getIngredient();
+        expirationDate = refrigerator.getExpirationDate();
+        quantity = refrigerator.getQuantity();
+        location = refrigerator.getLocation();
     }
 }
