@@ -1,0 +1,67 @@
+[[User-API]]
+= User-API
+유저 조회, 회원가입, 로그인, 삭제를 할 수 있는 api 입니다.
+
+[[User-Get]]
+== GET : /api/v1/user/{userId}
+=== 단일 회원을 조회
+
+operation::user-get[snippets='path-parameters,response-fields,response-body,http-request,http-response,']
+
+=== 예외 처리
+1. id를 입력했는데, 해당하는 id가 존재하지 않을 때
+
+    "message" : "해당하는 id가 없습니다. id를 다시 확인해주세요!"
+
+[[User-Register]]
+== POST : /api/v1/user/register
+=== 회원가입
+
+operation::user-register[snippets='request-fields,response-fields,request-body,response-body,http-request,http-response']
+
+=== 예외 처리
+1. id를 입력했는데, 동일한 id가 존재할 때
+
+    "message" : "동일한 id가 존재합니다!"
+
+2. name을 입력했는데, 동일한 name이 존재할 때
+
+    "message" : "동일한 닉네임이 존재합니다!"
+
+3. 입력한 pw와 check_pk가 다를 때
+
+    "message" : "비밀번호를 다시 확인해주세요!"
+
+[[User-Login]]
+== POST : /api/v1/user/login
+=== 회원 로그인
+
+operation::user-login[snippets='request-fields,response-fields,request-body,response-body,http-request,http-response']
+
+=== 예외 처리
+1. id를 입력했는데, 해당하는 id가 존재하지 않을 때
+
+    "message" : "해당하는 id가 없습니다. id를 다시 확인해주세요!"
+
+2. id는 맞는데, 비밀번호가 틀렸을 경우
+
+    "message" : "비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요!"
+
+[[User-Delete]]
+== DELETE : /api/v1/user
+=== 회원 삭제
+
+operation::user-delete[snippets='request-fields,response-fields,request-body,response-body,http-request,http-response']
+
+=== 예외 처리
+1. id를 입력했는데, 해당하는 id가 존재하지 않을 때
+
+    "message" : "해당하는 id가 없습니다. id를 다시 확인해주세요!"
+
+2. 입력한 pw와 check_pw가 다를 때
+
+    "message" : "비밀번호를 다시 확인해주세요!"
+
+3. id는 맞는데, 비밀번호가 틀렸을 경우
+
+    "message" : "비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요!"

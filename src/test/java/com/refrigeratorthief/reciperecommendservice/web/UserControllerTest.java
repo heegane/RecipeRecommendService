@@ -26,6 +26,8 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 
 import static org.mockito.ArgumentMatchers.any;
@@ -71,11 +73,11 @@ public class UserControllerTest {
     @Test
     void getUser() throws Exception {
         //given
-        String userId = "test";
+        String userId = testUtils.getTestUser().getId();
 
         UserResponseServiceDto userResponseServiceDto = UserResponseServiceDto.builder()
                 .id(userId)
-                .name("테스터")
+                .name(testUtils.getTestUser().getName())
                 .city(testUtils.getTestUser().getCity())
                 .dong(testUtils.getTestUser().getDong())
                 .build();
@@ -111,10 +113,10 @@ public class UserControllerTest {
     @Test
     void register() throws Exception {
         //given
-        String userName = "테스터";
+        String userName = testUtils.getTestUser().getName();
         UserRegisterRequestControllerDto userRegisterRequestControllerDto = UserRegisterRequestControllerDto.builder()
-                .id("test")
-                .name("테스터")
+                .id(testUtils.getTestUser().getId())
+                .name(testUtils.getTestUser().getName())
                 .pw(testUtils.getTestUser().getPw())
                 .checkPw(testUtils.getTestUser().getPw())
                 .city(testUtils.getTestUser().getCity())
@@ -156,10 +158,10 @@ public class UserControllerTest {
     void login() throws Exception {
         //given
         UserLoginRequestControllerDto userLoginRequestControllerDto = UserLoginRequestControllerDto.builder()
-                .id("test")
-                .pw("test")
+                .id(testUtils.getTestUser().getId())
+                .pw(testUtils.getTestUser().getPw())
                 .build();
-        String userName = "테스터";
+        String userName = testUtils.getTestUser().getName();
 
         doReturn(userName).when(userService).login(userLoginRequestControllerDto.toServiceDto());
 
@@ -192,12 +194,12 @@ public class UserControllerTest {
     void delete() throws Exception {
         //given
         UserDeleteRequestControllerDto userDeleteRequestControllerDto = UserDeleteRequestControllerDto.builder()
-                .id("test")
-                .pw("test")
-                .checkPw("test")
+                .id(testUtils.getTestUser().getId())
+                .pw(testUtils.getTestUser().getPw())
+                .checkPw(testUtils.getTestUser().getPw())
                 .build();
 
-        String userId = "test";
+        String userId = testUtils.getTestUser().getId();
 
         doReturn(userId).when(userService).delete(userDeleteRequestControllerDto.toServiceDto());
 
