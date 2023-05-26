@@ -63,6 +63,23 @@ class RefrigeratorServiceTest {
     }
 
     @Test
+    void getRefrigerator() {
+        //given
+        Integer testRefrigeratorId = testUtils.getTestRef().getId();
+        Refrigerator testRefrigerator = testUtils.getTestRef();
+
+        doReturn(Optional.of(testRefrigerator)).when(refrigeratorRepository).findById(testRefrigeratorId);
+
+        //when
+        RefrigeratorServiceResponseDto result = refrigeratorService.getRefrigerator(testRefrigeratorId);
+
+        //then
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(result.toString(), Objects.requireNonNull(result).toString());
+        verify(refrigeratorRepository).findById(testRefrigeratorId);
+    }
+
+    @Test
     void addFridge() {
         //given
         Refrigerator targetRef = testUtils.getTestRef();

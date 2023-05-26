@@ -26,7 +26,7 @@ public class RefrigeratorController {
 
     private final RefrigeratorService refrigeratorService;
 
-    // 냉장고 재료 조회
+    // 해당 유저의 냉장고 속 모든 재료를 조회
     @GetMapping("/{userId}")
     public ResponseEntity<List<RefrigeratorControllerResponseDto>> getFridgeAllByUserId(@PathVariable String userId) {
 
@@ -38,6 +38,17 @@ public class RefrigeratorController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(results);
+    }
+
+    // 냉장고 속 단일 재료의 정보를 조회
+    @GetMapping("/ingredient/{id}")
+    public ResponseEntity<RefrigeratorControllerResponseDto> getFridge(@PathVariable Integer id) {
+
+        RefrigeratorControllerResponseDto result;
+
+        result = refrigeratorService.getRefrigerator(id).toControllerDto();
+
+        return ResponseEntity.ok(result);
     }
 
     // 냉장고 재료 추가

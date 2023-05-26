@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.refrigeratorthief.reciperecommendservice.TestUtils;
+import com.refrigeratorthief.reciperecommendservice.domain.refrigerator.Refrigerator;
 import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.controllerDto.RefrigeratorAddControllerRequestDto;
 import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.controllerDto.RefrigeratorAddControllerResponseDto;
 import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.controllerDto.RefrigeratorUpdateControllerRequestDto;
@@ -74,7 +75,7 @@ public class RefrigeratorControllerTest {
     }
 
     @Test
-    void getFridge() throws Exception {
+    void getFridgeAll() throws Exception {
         //given
         String userId = testUtils.getTestUser().getId();
         List<RefrigeratorServiceResponseDto> targetFridgeList = new ArrayList<RefrigeratorServiceResponseDto>();
@@ -124,6 +125,47 @@ public class RefrigeratorControllerTest {
     }
 
     @Test
+    void getFridge() throws Exception {
+        //given
+        Integer id = testUtils.getTestRef().getId();
+        RefrigeratorServiceResponseDto refrigeratorServiceResponseDto = new RefrigeratorServiceResponseDto(testUtils.getTestRef());
+
+        doReturn(refrigeratorServiceResponseDto).when(refrigeratorService).getRefrigerator(id);
+
+        //when
+        ResultActions result = mvc.perform(
+                        RestDocumentationRequestBuilders.get("/api/v1/fridge/ingredient/{id}",id)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("fridge-get",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("조회할 냉장고-재료 id (PK)")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("조회된 냉장고-재료 id (PK)"),
+                                fieldWithPath("ingredientId").description("조회된 냉장고의 재료 id"),
+                                fieldWithPath("ingredientName").description("조회된 냉장고의 재료 이름"),
+                                fieldWithPath("ingredientImg").description("조회된 냉장고의 재료 사진"),
+                                fieldWithPath("ingredientUnitId").description("조회된 냉장고의 재료 단위 id"),
+                                fieldWithPath("ingredientUnitName").description("조회된 냉장고의 재료 단위 이름"),
+                                fieldWithPath("quantity").description("조회된 냉장고의 재료 수량"),
+                                fieldWithPath("expirationDate").description("조회된 냉장고의 재료 소비기한"),
+                                fieldWithPath("location").description("조회된 냉장고의 재료 저장 장소 (냉장/냉동/실온)"),
+                                fieldWithPath("userId").description("해당 냉장고의 유저 id"),
+                                fieldWithPath("userName").description("해당 냉장고의 유저 닉네임")
+                        )
+                ));
+
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(refrigeratorServiceResponseDto.toControllerDto())));
+        verify(refrigeratorService).getRefrigerator(id);
+    }
+
+    @Test
     void addFridge() throws Exception {
         //given
         RefrigeratorAddControllerRequestDto refrigeratorAddControllerRequestDto = RefrigeratorAddControllerRequestDto.builder()
@@ -162,10 +204,10 @@ public class RefrigeratorControllerTest {
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("userId").description("해당 냉장고의 유저 id"),
-                                fieldWithPath("ingredientId").description("해당 냉장고에 추가한 재료의 id"),
-                                fieldWithPath("expirationDate").description("해당 냉장고에 추가한 재료의 소비기한"),
-                                fieldWithPath("quantity").description("해당 냉장고에 추가한 재료의 수량"),
-                                fieldWithPath("location").description("해당 냉장고에 추가한 재료 저장 장소 (냉장/냉동/실온)")
+                                fieldWithPath("ingredientId").description("해당 냉장고에 추가할 재료의 id"),
+                                fieldWithPath("expirationDate").description("해당 냉장고에 추가할 재료의 소비기한"),
+                                fieldWithPath("quantity").description("해당 냉장고에 추가할 재료의 수량"),
+                                fieldWithPath("location").description("해당 냉장고에 추가할 재료 저장 장소 (냉장/냉동/실온)")
                         ),
                         responseFields(
                                 fieldWithPath("id").description("추가된 냉장고-재료 id (PK)"),
@@ -191,17 +233,17 @@ public class RefrigeratorControllerTest {
     @Test
     void deleteFridge() throws Exception {
         //given
-        Integer fridgeId = testUtils.getTestRef().getId();
+        Integer id = testUtils.getTestRef().getId();
         RefrigeratorDeleteServiceResponseDto refrigeratorDeleteServiceResponseDto = RefrigeratorDeleteServiceResponseDto
                 .builder()
-                .id(fridgeId)
+                .id(id)
                 .build();
 
-        doReturn(refrigeratorDeleteServiceResponseDto).when(refrigeratorService).deleteFridge(fridgeId);
+        doReturn(refrigeratorDeleteServiceResponseDto).when(refrigeratorService).deleteFridge(id);
 
         //when
         ResultActions result = mvc.perform(
-                        RestDocumentationRequestBuilders.delete("/api/v1/fridge/{fridgeId}",fridgeId)
+                        RestDocumentationRequestBuilders.delete("/api/v1/fridge/{id}",id)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -209,7 +251,7 @@ public class RefrigeratorControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
-                                parameterWithName("fridgeId").description("삭제할 냉장고-재료의 id (PK)")
+                                parameterWithName("id").description("삭제할 냉장고-재료의 id (PK)")
                         ),
                         responseFields(
                                 fieldWithPath("message").description("삭제 완료 안내 메시지")
@@ -219,7 +261,7 @@ public class RefrigeratorControllerTest {
         //then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("냉장고에서 해당 재료를 성공적으로 삭제했습니다."));
-        verify(refrigeratorService).deleteFridge(fridgeId);
+        verify(refrigeratorService).deleteFridge(id);
     }
 
     @Test

@@ -42,10 +42,20 @@ public class RefrigeratorService {
                 .orElseThrow(()->new CustomException("해당하는 유저 id가 존재하지 않습니다."));
 
         return refrigeratorRepository.findAllByUser(targetUser)
-                .orElseThrow(()->new CustomException("해당하는 냉장고가 존재하지 않습니다."))
+                .orElseThrow(()->new CustomException("해당하는 냉장고에 재료가 존재하지 않습니다."))
                 .stream()
                 .map(RefrigeratorServiceResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    // 냉장고 속 단일 식재료의 정보를 조회
+    @Transactional(readOnly = true)
+    public RefrigeratorServiceResponseDto getRefrigerator(Integer refrigeratorId) {
+        
+        Refrigerator targetRefrigerator = refrigeratorRepository.findById(refrigeratorId)
+                .orElseThrow(()->new CustomException("해당하는 냉장고가 존재하지 않습니다."));
+
+        return new RefrigeratorServiceResponseDto(targetRefrigerator);
     }
 
     @Transactional
