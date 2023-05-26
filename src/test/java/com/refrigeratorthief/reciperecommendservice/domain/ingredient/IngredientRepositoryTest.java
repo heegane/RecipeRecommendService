@@ -1,14 +1,6 @@
 package com.refrigeratorthief.reciperecommendservice.domain.ingredient;
 
 import com.refrigeratorthief.reciperecommendservice.TestUtils;
-import com.refrigeratorthief.reciperecommendservice.domain.board.Board;
-import com.refrigeratorthief.reciperecommendservice.domain.board.BoardRepository;
-import com.refrigeratorthief.reciperecommendservice.domain.category.Category;
-import com.refrigeratorthief.reciperecommendservice.domain.category.CategoryRepository;
-import com.refrigeratorthief.reciperecommendservice.domain.ingredientUnit.IngredientUnitRepository;
-import com.refrigeratorthief.reciperecommendservice.domain.refrigerator.Refrigerator;
-import com.refrigeratorthief.reciperecommendservice.domain.user.User;
-import com.refrigeratorthief.reciperecommendservice.domain.user.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +11,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
@@ -73,5 +68,20 @@ class IngredientRepositoryTest {
         assertEquals(targetIngredient.getImg(),result.getImg());
         assertEquals(targetIngredient.getUnit().getId(), result.getUnit().getId());
         assertEquals(targetIngredient.getUnit().getName(), result.getUnit().getName());
+    }
+
+    @Test
+    void findAllBy() {
+        //given
+        List<Ingredient> testGoal = new ArrayList<>();
+        testGoal.add(testUtils.getTestIngredient());
+        testGoal.add(testUtils.getTestIngredient2());
+
+        //when
+        List<Ingredient> results = ingredientRepository.findAllBy()
+                .orElseThrow(IllegalArgumentException::new);
+
+        //then
+        assertThat(testUtils.isListSame(testGoal,results),is(true));
     }
 }

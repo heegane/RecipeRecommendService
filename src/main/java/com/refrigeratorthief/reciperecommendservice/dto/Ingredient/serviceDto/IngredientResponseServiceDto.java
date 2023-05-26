@@ -4,6 +4,7 @@ import com.refrigeratorthief.reciperecommendservice.domain.ingredient.Ingredient
 import com.refrigeratorthief.reciperecommendservice.domain.ingredientUnit.IngredientUnit;
 import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import com.refrigeratorthief.reciperecommendservice.dto.Ingredient.controllerDto.IngredientResponseControllerDto;
+import com.refrigeratorthief.reciperecommendservice.dto.Ingredient.controllerDto.IngredientTinyResponseControllerDto;
 import lombok.*;
 
 @ToString
@@ -31,6 +32,14 @@ public class IngredientResponseServiceDto {
                 .img(img)
                 .ingredientUnitId(ingredientUnit.getId())
                 .ingredientUnitName(ingredientUnit.getName())
+                .build();
+    }
+
+    public IngredientTinyResponseControllerDto toTinyControllerDto(){
+        return IngredientTinyResponseControllerDto.builder()
+                .id(id)
+                .name(name)
+                .img(img)
                 .build();
     }
 }

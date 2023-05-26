@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class IngredientService {
@@ -26,6 +29,15 @@ public class IngredientService {
 
     @Autowired
     private final IngredientUnitRepository ingredientUnitRepository;
+
+    @Transactional(readOnly = true)
+    public List<IngredientResponseServiceDto> getIngredientAll() {
+        return ingredientRepository.findAllBy()
+                .orElseThrow(()->new CustomException("존재하는 재료가 없습니다."))
+                .stream()
+                .map(IngredientResponseServiceDto::new)
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public IngredientResponseServiceDto addIngredient(IngredientAddRequestServiceDto ingredientAddRequestServiceDto) {

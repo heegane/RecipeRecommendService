@@ -5,8 +5,11 @@ import com.refrigeratorthief.reciperecommendservice.domain.ingredient.Ingredient
 import com.refrigeratorthief.reciperecommendservice.domain.ingredient.IngredientRepository;
 import com.refrigeratorthief.reciperecommendservice.domain.ingredientUnit.IngredientUnit;
 import com.refrigeratorthief.reciperecommendservice.domain.ingredientUnit.IngredientUnitRepository;
+import com.refrigeratorthief.reciperecommendservice.domain.refrigerator.Refrigerator;
+import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import com.refrigeratorthief.reciperecommendservice.dto.Ingredient.serviceDto.IngredientAddRequestServiceDto;
 import com.refrigeratorthief.reciperecommendservice.dto.Ingredient.serviceDto.IngredientResponseServiceDto;
+import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.serviceDto.RefrigeratorServiceResponseDto;
 import com.refrigeratorthief.reciperecommendservice.dto.user.serviceDto.UserResponseServiceDto;
 import com.refrigeratorthief.reciperecommendservice.utils.CustomException;
 import org.junit.jupiter.api.AfterEach;
@@ -21,8 +24,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -55,6 +61,24 @@ public class IngredientServiceTest {
     @AfterEach
     void tearDown(){
 
+    }
+
+    @Test
+    void getIngredientAll() {
+        //given
+        List<Ingredient> testList = new ArrayList<>();
+        testList.add(testUtils.getTestIngredient());
+        testList.add(testUtils.getTestIngredient2());
+
+        doReturn(Optional.of(testList)).when(ingredientRepository).findAllBy();
+
+        //when
+        List<IngredientResponseServiceDto> results = ingredientService.getIngredientAll();
+
+        //then
+        Assertions.assertNotNull(results);
+        Assertions.assertEquals(testList.stream().map(IngredientResponseServiceDto::new).collect(Collectors.toList()).toString(), Objects.requireNonNull(results).toString());
+        verify(ingredientRepository).findAllBy();
     }
 
     @Test

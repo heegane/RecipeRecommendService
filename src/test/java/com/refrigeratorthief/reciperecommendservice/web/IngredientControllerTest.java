@@ -23,6 +23,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -59,6 +63,45 @@ public class IngredientControllerTest {
 
     @AfterEach
     void tearDown() {
+    }
+
+    @Test
+    void getIngredientAll() throws Exception {
+
+        //given
+        List<IngredientResponseServiceDto> targetIngredientList = new ArrayList<>();
+
+        IngredientResponseServiceDto targetIngredientDto1 = new IngredientResponseServiceDto(testUtils.getTestIngredient());
+        targetIngredientList.add(targetIngredientDto1);
+
+        IngredientResponseServiceDto targetIngredientDto2 = new IngredientResponseServiceDto(testUtils.getTestIngredient2());
+        targetIngredientList.add(targetIngredientDto2);
+
+        doReturn(targetIngredientList).when(ingredientService).getIngredientAll();
+
+        //when
+        ResultActions result = mvc.perform(
+                        RestDocumentationRequestBuilders.get("/api/v1/ingredient")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("ingredient-get-all",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("[].id").description("조회된 재료 id (PK)"),
+                                fieldWithPath("[].name").description("조회된 재료 이름"),
+                                fieldWithPath("[].img").description("조회된 재료 사진")
+                        )
+                ));
+
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(content().json(
+                        objectMapper.writeValueAsString(targetIngredientList.stream()
+                                .map(IngredientResponseServiceDto::toTinyControllerDto)
+                                .collect(Collectors.toList()))));
+        verify(ingredientService).getIngredientAll();
     }
 
     @Test
