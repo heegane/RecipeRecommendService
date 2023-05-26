@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
@@ -92,9 +92,9 @@ class BoardServiceTest {
         //given
         Board targetBoard = testUtils.getTestBoard();
 
-        doReturn(Optional.of(testUtils.getTestCategory())).when(categoryRepository).findByName(any());
-        doReturn(Optional.of(testUtils.getTestUser2())).when(userRepository).findById(any());
-        doReturn(Optional.of(targetBoard)).when(boardRepository).findById(targetBoard.getId());
+        doReturn(Optional.of(targetBoard)).when(boardRepository).findById(anyInt());
+        doReturn(Optional.of(testUtils.getTestCategory())).when(categoryRepository).findById(anyInt());
+        doReturn(Optional.of(testUtils.getTestUser2())).when(userRepository).findById(anyString());
 
         BoardUpdateServiceRequestDto boardUpdateServiceRequestDto = BoardUpdateServiceRequestDto
                 .builder()
@@ -103,7 +103,6 @@ class BoardServiceTest {
                 .content(targetBoard.getContent())
                 .img(targetBoard.getImg())
                 .type(targetBoard.getType())
-                .updatedDateTime(targetBoard.getUpdatedDateTime())
                 .category(targetBoard.getCategory())
                 .user(targetBoard.getUser())
                 .build();
@@ -114,9 +113,9 @@ class BoardServiceTest {
         //then
         Assertions.assertNotNull(result);
         Assertions.assertEquals("수정된 타이틀", result.getTitle());
-        verify(categoryRepository).findByName(any());
-        verify(userRepository).findById(any());
-        verify(boardRepository).findById(targetBoard.getId());
+        verify(boardRepository).findById(anyInt());
+        verify(categoryRepository).findById(anyInt());
+        verify(userRepository).findById(anyString());
     }
 
     @Test

@@ -28,18 +28,17 @@ public class BoardController {
         return ResponseEntity.ok(boardAddServiceResponseDto.toControllerDto(boardAddServiceResponseDto));
     }
 
-    // 게시글 상세 정보 조회
-    @GetMapping("/{id}")
-    public ResponseEntity<BoardControllerResponseDto> findById(@PathVariable Integer id) {
-        BoardServiceResponseDto boardServiceResponseDto = boardService.getBoard(id);
-        return ResponseEntity.ok(boardServiceResponseDto.toControllerDto(boardServiceResponseDto));
-    }
+//    // 게시글 상세 정보 조회
+//    @GetMapping("/{id}")
+//    public ResponseEntity<BoardControllerResponseDto> findById(@PathVariable Integer id) {
+//        BoardServiceResponseDto boardServiceResponseDto = boardService.getBoard(id);
+//        return ResponseEntity.ok(boardServiceResponseDto.toControllerDto(boardServiceResponseDto));
+//    }
 
     // 게시글 수정
     @PutMapping()
     public ResponseEntity<MessageDto> updateBoard(@RequestBody BoardUpdateControllerRequestDto boardUpdateControllerRequestDto) {
-        BoardUpdateServiceResponseDto boardUpdateServiceResponseDto = boardService.updateBoard(boardUpdateControllerRequestDto.toServiceDto(boardUpdateControllerRequestDto));
-//        boardService.updateBoard(boardUpdateControllerRequestDto.toServiceDto(boardUpdateControllerRequestDto));
+        boardService.updateBoard(boardUpdateControllerRequestDto.toServiceDto());
         return ResponseEntity.ok(new MessageDto("해당 게시글을 성공적으로 수정했습니다."));
     }
 

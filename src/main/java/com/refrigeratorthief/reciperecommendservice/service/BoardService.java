@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -76,8 +77,8 @@ public class BoardService {
                 .type(targetBoard.getType())
                 .createdDateTime(targetBoard.getCreatedDateTime())
                 .updatedDateTime(targetBoard.getUpdatedDateTime())
-                .category(targetBoard.getCategory().getName())
-                .user(targetBoard.getUser().getName())
+                .category(targetBoard.getCategory())
+                .user(targetBoard.getUser())
                 .build();
     }
 
@@ -86,36 +87,20 @@ public class BoardService {
     public BoardUpdateServiceResponseDto updateBoard(BoardUpdateServiceRequestDto boardUpdateServiceRequestDto) {
         Board targetBoard = boardRepository.findById(boardUpdateServiceRequestDto.getId())
                 .orElseThrow(()->new CustomException("해당하는 게시글이 존재하지 않습니다."));
-        Category targetCategory = categoryRepository.findByName(boardUpdateServiceRequestDto.getCategory().getName())
+        Category targetCategory = categoryRepository.findById(boardUpdateServiceRequestDto.getCategory().getId())
                 .orElseThrow(()->new CustomException("해당하는 카테고리가 존재하지 않습니다."));
         User targetUser = userRepository.findById(boardUpdateServiceRequestDto.getUser().getId())
                 .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
 
-        Board resultBoard = Board.builder()
-                .id(targetBoard.getId())
-                .title(boardUpdateServiceRequestDto.getTitle())
-                .content(boardUpdateServiceRequestDto.getContent())
-                .img(boardUpdateServiceRequestDto.getImg())
-                .type(boardUpdateServiceRequestDto.getType())
-                .createdDateTime(boardUpdateServiceRequestDto.getCreatedDateTime())
-                .updatedDateTime(LocalDateTime.now())
-                .category(targetCategory)
-                .user(targetUser)
-                .build();
+        if (!Objects.equals(targetUser.getId(), targetBoard.getUser().getId())) {
+            throw new CustomException("게시글 수정 권한이 없습니다.");
+        }
 
-        targetBoard.updateBoard(resultBoard);
+        targetBoard.updateBoard(boardUpdateServiceRequestDto.toEntity());
+        targetBoard.setUpdatedDateTime(LocalDateTime.now());
 
-        return BoardUpdateServiceResponseDto.builder()
-                .id(resultBoard.getId())
-                .title(resultBoard.getTitle())
-                .content(resultBoard.getContent())
-                .img(resultBoard.getImg())
-                .type(resultBoard.getType())
-                .createdDateTime(resultBoard.getCreatedDateTime())
-                .updatedDateTime(LocalDateTime.now())
-                .category(resultBoard.getCategory().getName())
-                .user(resultBoard.getUser().getName())
-                .build();
+        boardRepository.save(targetBoard);
+        return new BoardUpdateServiceResponseDto(targetBoard);
     }
 
     // 게시글 삭제
@@ -150,8 +135,8 @@ public class BoardService {
                     .type(boards.getType())
                     .createdDateTime(boards.getCreatedDateTime())
                     .updatedDateTime(boards.getUpdatedDateTime())
-                    .category(boards.getCategory().getName())
-                    .user(boards.getUser().getName())
+                    .category(boards.getCategory())
+                    .user(boards.getUser())
                     .build();
             dtoList.add(dto);
         }

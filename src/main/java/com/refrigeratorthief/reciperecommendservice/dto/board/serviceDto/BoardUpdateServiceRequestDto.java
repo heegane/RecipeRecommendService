@@ -13,13 +13,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardUpdateServiceRequestDto {
+
     private Integer id;
     private String title;
     private String content;
     private String img;
     private String type;
-    private LocalDateTime createdDateTime;
-    private LocalDateTime updatedDateTime;
     private Category category;
     private User user;
 
@@ -30,8 +29,6 @@ public class BoardUpdateServiceRequestDto {
                 .content(content)
                 .img(img)
                 .type(type)
-                .createdDateTime(createdDateTime)
-                .updatedDateTime(updatedDateTime)
                 .category(category)
                 .user(user)
                 .build();

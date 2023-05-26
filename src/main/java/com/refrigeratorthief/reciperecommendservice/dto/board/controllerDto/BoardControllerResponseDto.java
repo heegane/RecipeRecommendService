@@ -19,6 +19,8 @@ public class BoardControllerResponseDto {
     private String type;
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
-    private String category;
-    private String user;
+    private Integer categoryId;
+    private String categoryName;
+    private String userId;
+    private String userName;
 }
