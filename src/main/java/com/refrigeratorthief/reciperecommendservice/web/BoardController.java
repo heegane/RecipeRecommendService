@@ -39,7 +39,6 @@ public class BoardController {
     @PutMapping()
     public ResponseEntity<MessageDto> updateBoard(@RequestBody BoardUpdateControllerRequestDto boardUpdateControllerRequestDto) {
         BoardUpdateServiceResponseDto boardUpdateServiceResponseDto = boardService.updateBoard(boardUpdateControllerRequestDto.toServiceDto(boardUpdateControllerRequestDto));
-//        boardService.updateBoard(boardUpdateControllerRequestDto.toServiceDto(boardUpdateControllerRequestDto));
         return ResponseEntity.ok(new MessageDto("해당 게시글을 성공적으로 수정했습니다."));
     }
 
@@ -56,6 +55,5 @@ public class BoardController {
         List<BoardServiceResponseDto> boardServiceResponseDtoList = boardService.findBoardsByCategory(categoryId);
         return ResponseEntity.ok(boardServiceResponseDtoList);
     }
-
 
 }

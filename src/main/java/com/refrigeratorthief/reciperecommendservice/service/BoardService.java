@@ -54,8 +54,8 @@ public class BoardService {
                 .content(targetBoard.getContent())
                 .img(targetBoard.getImg())
                 .type(targetBoard.getType())
-                .createdDateTime(LocalDateTime.now())
-                .updatedDateTime(LocalDateTime.now())
+                .createdDateTime(targetBoard.getCreatedDateTime())
+                .updatedDateTime(targetBoard.getUpdatedDateTime())
                 .category(targetBoard.getCategory().getName())
                 .user(targetBoard.getUser().getName())
                 .build();
@@ -112,7 +112,7 @@ public class BoardService {
                 .img(resultBoard.getImg())
                 .type(resultBoard.getType())
                 .createdDateTime(resultBoard.getCreatedDateTime())
-                .updatedDateTime(LocalDateTime.now())
+                .updatedDateTime(resultBoard.getUpdatedDateTime())
                 .category(resultBoard.getCategory().getName())
                 .user(resultBoard.getUser().getName())
                 .build();
