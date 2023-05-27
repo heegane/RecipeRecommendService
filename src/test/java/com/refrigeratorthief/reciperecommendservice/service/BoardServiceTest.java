@@ -8,6 +8,7 @@ import com.refrigeratorthief.reciperecommendservice.domain.category.CategoryRepo
 import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import com.refrigeratorthief.reciperecommendservice.domain.user.UserRepository;
 import com.refrigeratorthief.reciperecommendservice.dto.board.serviceDto.*;
+import com.refrigeratorthief.reciperecommendservice.utils.CustomException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,6 +22,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -73,6 +76,32 @@ class BoardServiceTest {
     }
 
     @Test
+    void notMatchingCategoryErrorWhenAddBoard() {
+        //given
+        Category testCategory = testUtils.getTestCategory();
+        testCategory.setId(5);
+
+        BoardAddServiceRequestDto boardAddServiceRequestDto = BoardAddServiceRequestDto
+                .builder()
+                .title(testUtils.getTestBoard().getTitle())
+                .content(testUtils.getTestBoard().getContent())
+                .img(testUtils.getTestBoard().getImg())
+                .type("자유")
+                .category(testCategory)
+                .user(testUtils.getTestUser())
+                .build();
+
+        doReturn(Optional.of(testUtils.getTestCategory())).when(categoryRepository).findById(anyInt());
+        doReturn(Optional.of(testUtils.getTestUser())).when(userRepository).findById(anyString());
+
+        //when
+        CustomException result = assertThrows(CustomException.class, ()-> boardService.addBoard(boardAddServiceRequestDto));
+
+        // then
+        assertEquals("해당 카테고리를 고를 수 없습니다. (자유 게시판은 1. 음식자랑, 2. 일상, 3. 질문글, 4. 기타만 가능)",result.getMessage());
+    }
+
+    @Test
     void getBoard() {
         //given
         Board targetBoard = testUtils.getTestBoard();
@@ -116,6 +145,34 @@ class BoardServiceTest {
         verify(boardRepository).findById(anyInt());
         verify(categoryRepository).findById(anyInt());
         verify(userRepository).findById(anyString());
+    }
+
+    @Test
+    void notMatchingCategoryErrorWhenUpdateBoard() {
+        //given
+        Category testCategory = testUtils.getTestCategory();
+        testCategory.setId(5);
+
+        BoardUpdateServiceRequestDto boardUpdateServiceRequestDto = BoardUpdateServiceRequestDto
+                .builder()
+                .id(testUtils.getTestBoard().getId())
+                .title(testUtils.getTestBoard().getTitle())
+                .content(testUtils.getTestBoard().getContent())
+                .img(testUtils.getTestBoard().getImg())
+                .type("자유")
+                .user(testUtils.getTestBoard().getUser())
+                .category(testCategory)
+                .build();
+
+        doReturn(Optional.of(testUtils.getTestBoard())).when(boardRepository).findById(anyInt());
+        doReturn(Optional.of(testUtils.getTestCategory())).when(categoryRepository).findById(anyInt());
+        doReturn(Optional.of(testUtils.getTestUser())).when(userRepository).findById(anyString());
+
+        //when
+        CustomException result = assertThrows(CustomException.class, ()-> boardService.updateBoard(boardUpdateServiceRequestDto));
+
+        // then
+        assertEquals("해당 카테고리를 고를 수 없습니다. (자유 게시판은 1. 음식자랑, 2. 일상, 3. 질문글, 4. 기타만 가능)",result.getMessage());
     }
 
     @Test

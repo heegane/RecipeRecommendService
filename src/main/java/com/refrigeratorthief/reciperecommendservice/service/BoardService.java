@@ -36,6 +36,15 @@ public class BoardService {
         User targetUser = userRepository.findById(boardAddServiceRequestDto.getUser().getId())
                 .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
 
+        Integer categoryId = boardAddServiceRequestDto.getCategory().getId();
+        String boardType = boardAddServiceRequestDto.getType();
+       
+        if(boardType.equals("자유") && (categoryId == 5 || categoryId == 6 || categoryId == 7 || categoryId == 8)) {
+            throw new CustomException("해당 카테고리를 고를 수 없습니다. (자유 게시판은 1. 음식자랑, 2. 일상, 3. 질문글, 4. 기타만 가능)");
+        } else if (boardType.equals("거래") && (categoryId == 1 || categoryId == 2 || categoryId == 3 || categoryId == 4)) {
+            throw new CustomException("해당 카테고리를 고를 수 없습니다. (거래 게시판은 5. 살게요, 6. 팔게요, 7. 나눔해요, 8. 공구해요만 가능)");
+        }
+
         Board targetBoard = boardAddServiceRequestDto.toEntity(targetCategory,targetUser);
         targetBoard.setCreatedDateTime(LocalDateTime.now());
         targetBoard.setUpdatedDateTime(LocalDateTime.now());
@@ -65,8 +74,17 @@ public class BoardService {
         User targetUser = userRepository.findById(boardUpdateServiceRequestDto.getUser().getId())
                 .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
 
-        if (!Objects.equals(targetUser.getId(), targetBoard.getUser().getId())) {
+        if (!Objects.equals(targetBoard.getUser().getId(), boardUpdateServiceRequestDto.getUser().getId())) {
             throw new CustomException("게시글 수정 권한이 없습니다.");
+        }
+
+        Integer categoryId = boardUpdateServiceRequestDto.getCategory().getId();
+        String boardType = boardUpdateServiceRequestDto.getType();
+
+        if(boardType.equals("자유") && (categoryId == 5 || categoryId == 6 || categoryId == 7 || categoryId == 8)) {
+            throw new CustomException("해당 카테고리를 고를 수 없습니다. (자유 게시판은 1. 음식자랑, 2. 일상, 3. 질문글, 4. 기타만 가능)");
+        } else if (boardType.equals("거래") && (categoryId == 1 || categoryId == 2 || categoryId == 3 || categoryId == 4)) {
+            throw new CustomException("해당 카테고리를 고를 수 없습니다. (거래 게시판은 5. 살게요, 6. 팔게요, 7. 나눔해요, 8. 공구해요만 가능)");
         }
 
         targetBoard.updateBoard(boardUpdateServiceRequestDto.toEntity());
