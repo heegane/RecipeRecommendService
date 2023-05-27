@@ -17,19 +17,15 @@ public class BoardAddServiceRequestDto {
     private String content;
     private String img;
     private String type;
-    private LocalDateTime createdDateTime;
-    private LocalDateTime updatedDateTime;
     private Category category;
     private User user;
 
-    public Board toEntity() {
+    public Board toEntity(Category category, User user) {
         return Board.builder()
                 .title(title)
                 .content(content)
                 .img(img)
                 .type(type)
-                .createdDateTime(createdDateTime)
-                .updatedDateTime(updatedDateTime)
                 .category(category)
                 .user(user)
                 .build();

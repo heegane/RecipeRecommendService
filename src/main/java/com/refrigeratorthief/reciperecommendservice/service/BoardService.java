@@ -30,36 +30,19 @@ public class BoardService {
 
     // 게시글 저장
     @Transactional
-    public BoardAddServiceResponseDto addBoard(BoardAddServiceRequestDto boardAddServiceRequestDto) {
+    public BoardServiceResponseDto addBoard(BoardAddServiceRequestDto boardAddServiceRequestDto) {
         Category targetCategory = categoryRepository.findById(boardAddServiceRequestDto.getCategory().getId())
                 .orElseThrow(()->new CustomException("해당하는 카테고리가 존재하지 않습니다."));
         User targetUser = userRepository.findById(boardAddServiceRequestDto.getUser().getId())
                 .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
 
-        Board targetBoard = Board.builder()
-                .title(boardAddServiceRequestDto.getTitle())
-                .content(boardAddServiceRequestDto.getContent())
-                .img(boardAddServiceRequestDto.getImg())
-                .type(boardAddServiceRequestDto.getType())
-                .createdDateTime(LocalDateTime.now())
-                .updatedDateTime(LocalDateTime.now())
-                .category(targetCategory)
-                .user(targetUser)
-                .build();
+        Board targetBoard = boardAddServiceRequestDto.toEntity(targetCategory,targetUser);
+        targetBoard.setCreatedDateTime(LocalDateTime.now());
+        targetBoard.setUpdatedDateTime(LocalDateTime.now());
 
         boardRepository.save(targetBoard);
 
-        return BoardAddServiceResponseDto.builder()
-                .id(targetBoard.getId())
-                .title(targetBoard.getTitle())
-                .content(targetBoard.getContent())
-                .img(targetBoard.getImg())
-                .type(targetBoard.getType())
-                .createdDateTime(LocalDateTime.now())
-                .updatedDateTime(LocalDateTime.now())
-                .category(targetBoard.getCategory().getName())
-                .user(targetBoard.getUser().getName())
-                .build();
+        return new BoardServiceResponseDto(targetBoard);
     }
 
     // 게시글 상세 정보 조회
@@ -69,17 +52,7 @@ public class BoardService {
         Board targetBoard = boardRepository.findById(id)
                 .orElseThrow(()->new CustomException("해당하는 게시글이 존재하지 않습니다."));
 
-        return BoardServiceResponseDto.builder()
-                .id(targetBoard.getId())
-                .title(targetBoard.getTitle())
-                .content(targetBoard.getContent())
-                .img(targetBoard.getImg())
-                .type(targetBoard.getType())
-                .createdDateTime(targetBoard.getCreatedDateTime())
-                .updatedDateTime(targetBoard.getUpdatedDateTime())
-                .category(targetBoard.getCategory())
-                .user(targetBoard.getUser())
-                .build();
+        return new BoardServiceResponseDto(targetBoard);
     }
 
     // 게시글 수정
@@ -106,9 +79,6 @@ public class BoardService {
     // 게시글 삭제
     @Transactional
     public BoardDeleteServiceResponseDto deleteBoard(Integer id) {
-        if (boardRepository.findById(id).isEmpty()) {
-            throw new CustomException("해당하는 게시글이 존재하지 않습니다.");
-        }
 
         Board targetBoard = boardRepository.findById(id)
                 .orElseThrow(()->new CustomException("해당하는 게시글이 존재하지 않습니다."));

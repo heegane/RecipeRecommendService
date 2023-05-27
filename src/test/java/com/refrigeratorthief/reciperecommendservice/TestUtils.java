@@ -39,6 +39,7 @@ public class TestUtils {
 
     private final Category testCategory;
     private final Board testBoard;
+    private final Board testBoard2;
 
     private final IngredientUnit testIngredientUnit;
     private final IngredientUnit testIngredientUnit2;
@@ -82,6 +83,17 @@ public class TestUtils {
                 .updatedDateTime(testDateTime2)
                 .category(testCategory)
                 .user(testUser2)
+                .build();
+        testBoard2 = Board.builder()
+                .id(3)
+                .title("토마토 1개 팔아요")
+                .content("토마토 1개 팝니다.")
+                .type("거래")
+                .img("tomato.jpg")
+                .createdDateTime(testDateTime)
+                .updatedDateTime(testDateTime2)
+                .category(testCategory)
+                .user(testUser)
                 .build();
 
         testIngredientUnit = IngredientUnit.builder()

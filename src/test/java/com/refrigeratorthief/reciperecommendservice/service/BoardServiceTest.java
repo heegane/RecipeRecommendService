@@ -49,27 +49,27 @@ class BoardServiceTest {
                 .content(testUtils.getTestBoard().getContent())
                 .img(testUtils.getTestBoard().getImg())
                 .type(testUtils.getTestBoard().getType())
-                .createdDateTime(testUtils.getTestBoard().getCreatedDateTime())
-                .updatedDateTime(testUtils.getTestBoard().getUpdatedDateTime())
                 .category(testUtils.getTestBoard().getCategory())
                 .user(testUtils.getTestBoard().getUser())
                 .build();
 
-        Board testBoardEntity = boardAddServiceRequestDto.toEntity();
         Category testCategoryEntity = testUtils.getTestCategory();
         User testUserEntity = testUtils.getTestUser2();
+        Board testBoardEntity = boardAddServiceRequestDto.toEntity(testCategoryEntity,testUserEntity);
 
-        doReturn(Optional.of(testCategoryEntity)).when(categoryRepository).findByName(any());
-        doReturn(Optional.of(testUserEntity)).when(userRepository).findById(any());
-        doReturn(testBoardEntity).when(boardRepository).save(any());
+        doReturn(Optional.of(testCategoryEntity)).when(categoryRepository).findById(anyInt());
+        doReturn(Optional.of(testUserEntity)).when(userRepository).findById(anyString());
+        doReturn(testBoardEntity).when(boardRepository).save(any(Board.class));
 
         //when
-        BoardAddServiceResponseDto result = boardService.addBoard(boardAddServiceRequestDto);
+        BoardServiceResponseDto result = boardService.addBoard(boardAddServiceRequestDto);
 
         //then
         Assertions.assertNotNull(result);
         Assertions.assertEquals(result, Objects.requireNonNull(result));
-        verify(boardRepository).save(any());
+        verify(categoryRepository).findById(anyInt());
+        verify(userRepository).findById(anyString());
+        verify(boardRepository).save(any(Board.class));
     }
 
     @Test

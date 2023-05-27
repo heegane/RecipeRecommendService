@@ -1,5 +1,7 @@
 package com.refrigeratorthief.reciperecommendservice.dto.board.controllerDto;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.refrigeratorthief.reciperecommendservice.domain.category.Category;
 import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import com.refrigeratorthief.reciperecommendservice.dto.board.serviceDto.BoardAddServiceRequestDto;
@@ -12,26 +14,23 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class BoardAddControllerRequestDto {
     private String title;
     private String content;
     private String img;
     private String type;
-    private LocalDateTime createdDateTime;
-    private LocalDateTime updatedDateTime;
-    private Integer category;
-    private String user;
+    private Integer categoryId;
+    private String userId;
 
-    public BoardAddServiceRequestDto toServiceDto(BoardAddControllerRequestDto boardAddControllerRequestDto) {
+    public BoardAddServiceRequestDto toServiceDto() {
         return BoardAddServiceRequestDto.builder()
-                .title(boardAddControllerRequestDto.getTitle())
-                .content(boardAddControllerRequestDto.getContent())
-                .img(boardAddControllerRequestDto.getImg())
-                .type(boardAddControllerRequestDto.getType())
-                .createdDateTime(boardAddControllerRequestDto.getCreatedDateTime())
-                .updatedDateTime(boardAddControllerRequestDto.getUpdatedDateTime())
-                .category(Category.builder().id(category).build())
-                .user(User.builder().id(user).build())
+                .title(title)
+                .content(content)
+                .img(img)
+                .type(type)
+                .category(Category.builder().id(categoryId).build())
+                .user(User.builder().id(userId).build())
                 .build();
     }
 }
