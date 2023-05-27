@@ -1,0 +1,91 @@
+[[Board-API]]
+= Board-API
+게시글 조회, 추가, 수정, 삭제, 카테고리 별 게시글 조회를 할 수 있는 api입니다.
+
+[[Board-Get]]
+== GET : /api/v1/board/{id}
+=== 단일 게시글의 정보를 조회
+
+operation::board-get[snippets='path-parameters,response-fields,response-body,http-request,http-response,']
+
+=== 예외 처리
+1. 입력한 id에 해당하는 게시글이 없을 때
+
+    "message" : "해당하는 게시글이 존재하지 않습니다."
+
+[[Board-Add]]
+== POST : /api/v1/board
+=== 단일 게시글을 추가
+
+operation::board-post[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response']
+
+=== 예외 처리
+1. 입력한 category_id에 해당하는 카테고리가 없을 때
+
+    "message" : "해당하는 카테고리가 존재하지 않습니다."
+
+2. 입력한 user_id에 해당하는 유저가 없을 때
+
+    "message" : "해당하는 id가 존재하지 않습니다."
+
+3. board type은 자유 게시판인데, 거래 게시판에 해당하는 카테고리를 골랐을 때
+
+    "message" : "해당 카테고리를 고를 수 없습니다. (자유 게시판은 1. 음식자랑, 2. 일상, 3. 질문글, 4. 기타만 가능)"
+
+4. board type은 거래 게시판인데, 자유 게시판에 해당하는 카테고리를 골랐을 때
+
+    "message" : "해당 카테고리를 고를 수 없습니다. (해당 카테고리를 고를 수 없습니다. (거래 게시판은 5. 살게요, 6. 팔게요, 7. 나눔해요, 8. 공구해요만 가능))"
+
+[[Board-Update]]
+== PUT : /api/v1/board
+=== 단일 게시글을 수정
+
+operation::board-update[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response']
+
+=== 예외 처리
+1. 입력한 id에 해당하는 게시글이 없을 때
+
+    "message" : "해당하는 게시글이 존재하지 않습니다."
+
+2. 입력한 category_id에 해당하는 카테고리가 없을 때
+
+    "message" : "해당하는 카테고리가 존재하지 않습니다."
+
+3. 입력한 user_id에 해당하는 유저가 없을 때
+
+    "message" : "해당하는 id가 존재하지 않습니다."
+
+4. 해당 게시글의 글쓴이가 본인이 아니라서 접근 권한이 제어된 경우
+
+    "message" : "게시글 수정 권한이 없습니다."
+
+5. board type은 자유 게시판인데, 거래 게시판에 해당하는 카테고리를 골랐을 때
+
+    "message" : "해당 카테고리를 고를 수 없습니다. (자유 게시판은 1. 음식자랑, 2. 일상, 3. 질문글, 4. 기타만 가능)"
+
+6. board type은 거래 게시판인데, 자유 게시판에 해당하는 카테고리를 골랐을 때
+
+    "message" : "해당 카테고리를 고를 수 없습니다. (해당 카테고리를 고를 수 없습니다. (거래 게시판은 5. 살게요, 6. 팔게요, 7. 나눔해요, 8. 공구해요만 가능))"
+
+
+[[Board-Delete]]
+== DELETE : /api/v1/board/{id}
+=== 단일 게시글을 삭제
+
+operation::board-delete[snippets='path-parameters,response-fields,response-body,http-request,http-response,']
+
+=== 예외 처리
+1. 입력한 id에 해당하는 게시글이 없을 때
+
+    "message" : "해당하는 게시글이 존재하지 않습니다."
+
+[[Board-Get-By-Category]]
+== GET : /api/v1/board/category/{categoryId}
+=== 카테고리별 모든 게시글을 조회
+
+operation::boards-get-by-category[snippets='path-parameters,response-fields,response-body,http-request,http-response,']
+
+=== 예외 처리
+1. 입력한 id에 해당하는 게시글이 없을 때
+
+    "message" : "해당하는 게시글이 존재하지 않습니다."
