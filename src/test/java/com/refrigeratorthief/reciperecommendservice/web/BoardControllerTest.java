@@ -90,7 +90,7 @@ class BoardControllerTest {
                 .build();
 
         doReturn(boardServiceResponseDto).when(boardService).addBoard(any(BoardAddServiceRequestDto.class));
-
+      
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.post("/api/v1/board")
@@ -149,7 +149,7 @@ class BoardControllerTest {
                 .build();
 
         doReturn(boardServiceResponseDto).when(boardService).getBoard(id);
-
+      
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.get("/api/v1/board/{id}", id)

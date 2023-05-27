@@ -77,7 +77,7 @@ public class BoardService {
         if (!Objects.equals(targetBoard.getUser().getId(), boardUpdateServiceRequestDto.getUser().getId())) {
             throw new CustomException("게시글 수정 권한이 없습니다.");
         }
-
+      
         Integer categoryId = boardUpdateServiceRequestDto.getCategory().getId();
         String boardType = boardUpdateServiceRequestDto.getType();
 
