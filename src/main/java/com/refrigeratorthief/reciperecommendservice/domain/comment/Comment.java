@@ -47,10 +47,4 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_BOARD_IDX",nullable = false)
     private Board board;
-
-    public void updateComment (Comment comment) {
-        this.upperId = comment.getUpperId();
-        this.content = comment.getContent();
-        this.updatedDateTime = comment.getUpdatedDateTime();
-    }
 }

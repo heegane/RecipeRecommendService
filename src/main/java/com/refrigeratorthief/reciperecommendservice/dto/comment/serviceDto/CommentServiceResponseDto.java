@@ -1,6 +1,6 @@
 package com.refrigeratorthief.reciperecommendservice.dto.comment.serviceDto;
 
-import com.refrigeratorthief.reciperecommendservice.dto.comment.controllerDto.CommentAddControllerResponseDto;
+import com.refrigeratorthief.reciperecommendservice.dto.comment.controllerDto.CommentResponseControllerDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentAddServiceResponseDto {
+public class CommentServiceResponseDto {
     private Integer id;
     private Integer upperId;
     private String content;
@@ -19,15 +19,15 @@ public class CommentAddServiceResponseDto {
     private String user;
     private Integer board;
 
-    public CommentAddControllerResponseDto toControllerDto() {
-        return CommentAddControllerResponseDto.builder()
+    public CommentResponseControllerDto toControllerDto() {
+        return CommentResponseControllerDto.builder()
                 .id(id)
                 .upperId(upperId)
                 .content(content)
                 .createdDateTime(createdDateTime)
                 .updatedDateTime(updatedDateTime)
-                .user(user)
-                .board(board)
+                .userName(user)
+                .boardId(board)
                 .build();
     }
 }

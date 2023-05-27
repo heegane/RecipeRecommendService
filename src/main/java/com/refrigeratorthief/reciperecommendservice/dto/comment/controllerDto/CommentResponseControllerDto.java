@@ -1,5 +1,7 @@
 package com.refrigeratorthief.reciperecommendservice.dto.comment.controllerDto;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -9,12 +11,14 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentAddControllerResponseDto {
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+public class CommentResponseControllerDto {
+
     private Integer id;
     private Integer upperId;
     private String content;
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
-    private String user;
-    private Integer board;
+    private String userName;
+    private Integer boardId;
 }
