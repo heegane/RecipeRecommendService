@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -29,36 +30,28 @@ public class BoardService {
 
     // 게시글 저장
     @Transactional
-    public BoardAddServiceResponseDto addBoard(BoardAddServiceRequestDto boardAddServiceRequestDto) {
-        Category targetCategory = categoryRepository.findByName(boardAddServiceRequestDto.getCategory().getName())
+    public BoardServiceResponseDto addBoard(BoardAddServiceRequestDto boardAddServiceRequestDto) {
+        Category targetCategory = categoryRepository.findById(boardAddServiceRequestDto.getCategory().getId())
                 .orElseThrow(()->new CustomException("해당하는 카테고리가 존재하지 않습니다."));
         User targetUser = userRepository.findById(boardAddServiceRequestDto.getUser().getId())
                 .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
 
-        Board targetBoard = Board.builder()
-                .title(boardAddServiceRequestDto.getTitle())
-                .content(boardAddServiceRequestDto.getContent())
-                .img(boardAddServiceRequestDto.getImg())
-                .type(boardAddServiceRequestDto.getType())
-                .createdDateTime(LocalDateTime.now())
-                .updatedDateTime(LocalDateTime.now())
-                .category(targetCategory)
-                .user(targetUser)
-                .build();
+        Integer categoryId = boardAddServiceRequestDto.getCategory().getId();
+        String boardType = boardAddServiceRequestDto.getType();
+       
+        if(boardType.equals("자유") && (categoryId == 5 || categoryId == 6 || categoryId == 7 || categoryId == 8)) {
+            throw new CustomException("해당 카테고리를 고를 수 없습니다. (자유 게시판은 1. 음식자랑, 2. 일상, 3. 질문글, 4. 기타만 가능)");
+        } else if (boardType.equals("거래") && (categoryId == 1 || categoryId == 2 || categoryId == 3 || categoryId == 4)) {
+            throw new CustomException("해당 카테고리를 고를 수 없습니다. (거래 게시판은 5. 살게요, 6. 팔게요, 7. 나눔해요, 8. 공구해요만 가능)");
+        }
+
+        Board targetBoard = boardAddServiceRequestDto.toEntity(targetCategory,targetUser);
+        targetBoard.setCreatedDateTime(LocalDateTime.now());
+        targetBoard.setUpdatedDateTime(LocalDateTime.now());
 
         boardRepository.save(targetBoard);
 
-        return BoardAddServiceResponseDto.builder()
-                .id(targetBoard.getId())
-                .title(targetBoard.getTitle())
-                .content(targetBoard.getContent())
-                .img(targetBoard.getImg())
-                .type(targetBoard.getType())
-                .createdDateTime(targetBoard.getCreatedDateTime())
-                .updatedDateTime(targetBoard.getUpdatedDateTime())
-                .category(targetBoard.getCategory().getName())
-                .user(targetBoard.getUser().getName())
-                .build();
+        return new BoardServiceResponseDto(targetBoard);
     }
 
     // 게시글 상세 정보 조회
@@ -68,17 +61,7 @@ public class BoardService {
         Board targetBoard = boardRepository.findById(id)
                 .orElseThrow(()->new CustomException("해당하는 게시글이 존재하지 않습니다."));
 
-        return BoardServiceResponseDto.builder()
-                .id(targetBoard.getId())
-                .title(targetBoard.getTitle())
-                .content(targetBoard.getContent())
-                .img(targetBoard.getImg())
-                .type(targetBoard.getType())
-                .createdDateTime(targetBoard.getCreatedDateTime())
-                .updatedDateTime(targetBoard.getUpdatedDateTime())
-                .category(targetBoard.getCategory().getName())
-                .user(targetBoard.getUser().getName())
-                .build();
+        return new BoardServiceResponseDto(targetBoard);
     }
 
     // 게시글 수정
@@ -86,44 +69,34 @@ public class BoardService {
     public BoardUpdateServiceResponseDto updateBoard(BoardUpdateServiceRequestDto boardUpdateServiceRequestDto) {
         Board targetBoard = boardRepository.findById(boardUpdateServiceRequestDto.getId())
                 .orElseThrow(()->new CustomException("해당하는 게시글이 존재하지 않습니다."));
-        Category targetCategory = categoryRepository.findByName(boardUpdateServiceRequestDto.getCategory().getName())
+        Category targetCategory = categoryRepository.findById(boardUpdateServiceRequestDto.getCategory().getId())
                 .orElseThrow(()->new CustomException("해당하는 카테고리가 존재하지 않습니다."));
         User targetUser = userRepository.findById(boardUpdateServiceRequestDto.getUser().getId())
                 .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
 
-        Board resultBoard = Board.builder()
-                .id(targetBoard.getId())
-                .title(boardUpdateServiceRequestDto.getTitle())
-                .content(boardUpdateServiceRequestDto.getContent())
-                .img(boardUpdateServiceRequestDto.getImg())
-                .type(boardUpdateServiceRequestDto.getType())
-                .createdDateTime(boardUpdateServiceRequestDto.getCreatedDateTime())
-                .updatedDateTime(LocalDateTime.now())
-                .category(targetCategory)
-                .user(targetUser)
-                .build();
+        if (!Objects.equals(targetBoard.getUser().getId(), boardUpdateServiceRequestDto.getUser().getId())) {
+            throw new CustomException("게시글 수정 권한이 없습니다.");
+        }
+      
+        Integer categoryId = boardUpdateServiceRequestDto.getCategory().getId();
+        String boardType = boardUpdateServiceRequestDto.getType();
 
-        targetBoard.updateBoard(resultBoard);
+        if(boardType.equals("자유") && (categoryId == 5 || categoryId == 6 || categoryId == 7 || categoryId == 8)) {
+            throw new CustomException("해당 카테고리를 고를 수 없습니다. (자유 게시판은 1. 음식자랑, 2. 일상, 3. 질문글, 4. 기타만 가능)");
+        } else if (boardType.equals("거래") && (categoryId == 1 || categoryId == 2 || categoryId == 3 || categoryId == 4)) {
+            throw new CustomException("해당 카테고리를 고를 수 없습니다. (거래 게시판은 5. 살게요, 6. 팔게요, 7. 나눔해요, 8. 공구해요만 가능)");
+        }
 
-        return BoardUpdateServiceResponseDto.builder()
-                .id(resultBoard.getId())
-                .title(resultBoard.getTitle())
-                .content(resultBoard.getContent())
-                .img(resultBoard.getImg())
-                .type(resultBoard.getType())
-                .createdDateTime(resultBoard.getCreatedDateTime())
-                .updatedDateTime(resultBoard.getUpdatedDateTime())
-                .category(resultBoard.getCategory().getName())
-                .user(resultBoard.getUser().getName())
-                .build();
+        targetBoard.updateBoard(boardUpdateServiceRequestDto.toEntity());
+        targetBoard.setUpdatedDateTime(LocalDateTime.now());
+
+        boardRepository.save(targetBoard);
+        return new BoardUpdateServiceResponseDto(targetBoard);
     }
 
     // 게시글 삭제
     @Transactional
     public BoardDeleteServiceResponseDto deleteBoard(Integer id) {
-        if (boardRepository.findById(id).isEmpty()) {
-            throw new CustomException("해당하는 게시글이 존재하지 않습니다.");
-        }
 
         Board targetBoard = boardRepository.findById(id)
                 .orElseThrow(()->new CustomException("해당하는 게시글이 존재하지 않습니다."));
@@ -150,8 +123,8 @@ public class BoardService {
                     .type(boards.getType())
                     .createdDateTime(boards.getCreatedDateTime())
                     .updatedDateTime(boards.getUpdatedDateTime())
-                    .category(boards.getCategory().getName())
-                    .user(boards.getUser().getName())
+                    .category(boards.getCategory())
+                    .user(boards.getUser())
                     .build();
             dtoList.add(dto);
         }

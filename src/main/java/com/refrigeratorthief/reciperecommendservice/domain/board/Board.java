@@ -55,12 +55,11 @@ public class Board {
     private User user;
 
     public void updateBoard (Board board) {
-        this.title = board.getTitle();
-        this.content = board.getContent();
-        this.img = board.getImg();
-        this.type = board.getType();
-        this.category = board.getCategory();
-        this.updatedDateTime = board.getUpdatedDateTime();
-        this.user = board.getUser();
+        title = board.getTitle();
+        content = board.getContent();
+        img = board.getImg();
+        type = board.getType();
+        category = board.getCategory();
+        updatedDateTime = board.getUpdatedDateTime();
     }
 }

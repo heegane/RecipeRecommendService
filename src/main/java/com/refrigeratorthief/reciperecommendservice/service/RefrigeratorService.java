@@ -8,6 +8,7 @@ import com.refrigeratorthief.reciperecommendservice.domain.refrigerator.Refriger
 import com.refrigeratorthief.reciperecommendservice.domain.refrigerator.RefrigeratorRepository;
 import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import com.refrigeratorthief.reciperecommendservice.domain.user.UserRepository;
+import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.serviceDto.RefrigeratorServiceResponseDto;
 import com.refrigeratorthief.reciperecommendservice.dto.board.serviceDto.BoardAddServiceResponseDto;
 import com.refrigeratorthief.reciperecommendservice.dto.board.serviceDto.BoardDeleteServiceResponseDto;
 import com.refrigeratorthief.reciperecommendservice.dto.refrigerator.serviceDto.*;
@@ -19,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -30,24 +33,29 @@ public class RefrigeratorService {
     @Autowired
     private final IngredientRepository ingredientRepository;
 
+
+    // userId로 인자 받아서 해당하는 냉장고 속의 모든 재료 아이템 List로 반환
     @Transactional(readOnly = true)
-    public RefrigeratorServiceResponseDto getRefrigerator(Integer id) {
-        Refrigerator targetRefri = refrigeratorRepository.findById(id)
+    public List<RefrigeratorServiceResponseDto> getRefrigeratorAll(String userId) {
+
+        User targetUser = userRepository.findById(userId)
+                .orElseThrow(()->new CustomException("해당하는 유저 id가 존재하지 않습니다."));
+
+        return refrigeratorRepository.findAllByUser(targetUser)
+                .orElseThrow(()->new CustomException("해당하는 냉장고에 재료가 존재하지 않습니다."))
+                .stream()
+                .map(RefrigeratorServiceResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    // 냉장고 속 단일 식재료의 정보를 조회
+    @Transactional(readOnly = true)
+    public RefrigeratorServiceResponseDto getRefrigerator(Integer refrigeratorId) {
+        
+        Refrigerator targetRefrigerator = refrigeratorRepository.findById(refrigeratorId)
                 .orElseThrow(()->new CustomException("해당하는 냉장고가 존재하지 않습니다."));
 
-        return RefrigeratorServiceResponseDto.builder()
-                .id(targetRefri.getId())
-                .expirationDate(targetRefri.getExpirationDate())
-                .quantity(targetRefri.getQuantity())
-                .location(targetRefri.getLocation())
-                .userId(targetRefri.getUser().getId())
-                .userName(targetRefri.getUser().getName())
-                .ingredientId(targetRefri.getIngredient().getId())
-                .ingredientName(targetRefri.getIngredient().getName())
-                .ingredientImg(targetRefri.getIngredient().getImg())
-                .ingredientUnitId(targetRefri.getIngredient().getUnit().getId())
-                .ingredientUnitName(targetRefri.getIngredient().getUnit().getName())
-                .build();
+        return new RefrigeratorServiceResponseDto(targetRefrigerator);
     }
 
     @Transactional
@@ -84,44 +92,24 @@ public class RefrigeratorService {
 
     @Transactional
     public RefrigeratorUpdateServiceResponseDto updateFridge(RefrigeratorUpdateServiceRequestDto refrigeratorUpdateServiceRequestDto) {
-        Ingredient targetIngredient = ingredientRepository.findById(refrigeratorUpdateServiceRequestDto.getIngredientId())
+
+        User targetUser = userRepository.findUserById(refrigeratorUpdateServiceRequestDto.getUser().getId())
+                .orElseThrow(()->new CustomException("해당하는 유저가 존재하지 않습니다."));
+        Ingredient targetIngredient = ingredientRepository.findById(refrigeratorUpdateServiceRequestDto.getIngredient().getId())
                 .orElseThrow(()->new CustomException("해당하는 재료가 존재하지 않습니다."));
-        User targetUser = userRepository.findById(refrigeratorUpdateServiceRequestDto.getUserId())
-                .orElseThrow(()->new CustomException("해당하는 id가 존재하지 않습니다."));
-        Refrigerator targetRefri = refrigeratorRepository.findById(refrigeratorUpdateServiceRequestDto.getId())
+        Refrigerator targetRefri = refrigeratorRepository.findRefrigeratorByUserAndIngredient(targetUser, targetIngredient)
                 .orElseThrow(()->new CustomException("해당하는 냉장고가 존재하지 않습니다."));
 
-        Refrigerator resultFridge = Refrigerator.builder()
-                .id(targetRefri.getId())
-                .expirationDate(refrigeratorUpdateServiceRequestDto.getExpirationDate())
-                .quantity(refrigeratorUpdateServiceRequestDto.getQuantity())
-                .location(refrigeratorUpdateServiceRequestDto.getLocation())
-                .user(targetUser)
-                .ingredient(targetIngredient)
-                .build();
+        targetRefri.updateFridge(refrigeratorUpdateServiceRequestDto.toEntity());
 
-        targetRefri.updateFridge(resultFridge);
+        refrigeratorRepository.save(targetRefri);
 
-        return RefrigeratorUpdateServiceResponseDto.builder()
-                .id(resultFridge.getId())
-                .expirationDate(resultFridge.getExpirationDate())
-                .quantity(resultFridge.getQuantity())
-                .location(resultFridge.getLocation())
-                .userId(resultFridge.getUser().getId())
-                .userName(resultFridge.getUser().getName())
-                .ingredientId(resultFridge.getIngredient().getId())
-                .ingredientName(resultFridge.getIngredient().getName())
-                .ingredientImg(resultFridge.getIngredient().getImg())
-                .ingredientUnitId(resultFridge.getIngredient().getUnit().getId())
-                .ingredientUnitName(resultFridge.getIngredient().getUnit().getName())
-                .build();
+        return new RefrigeratorUpdateServiceResponseDto(targetRefri);
     }
 
     @Transactional
     public RefrigeratorDeleteServiceResponseDto deleteFridge(Integer id) {
-        if (refrigeratorRepository.findById(id).isEmpty()) {
-            throw new CustomException("해당하는 냉장고가 존재하지 않습니다.");
-        }
+
         Refrigerator targetRefri = refrigeratorRepository.findById(id)
                 .orElseThrow(()->new CustomException("해당하는 냉장고가 존재하지 않습니다."));
         refrigeratorRepository.delete(targetRefri);

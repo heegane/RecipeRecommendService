@@ -1,9 +1,7 @@
 package com.refrigeratorthief.reciperecommendservice.dto.board.controllerDto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class BoardControllerResponseDto {
+public class BoardCategoryResponseControllerDto {
     private Integer id;
     private String title;
     private String content;
@@ -22,8 +20,6 @@ public class BoardControllerResponseDto {
     private String type;
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
-    private Integer categoryId;
-    private String categoryName;
     private String userId;
     private String userName;
 }

@@ -1,5 +1,7 @@
 package com.refrigeratorthief.reciperecommendservice;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.refrigeratorthief.reciperecommendservice.domain.board.Board;
 import com.refrigeratorthief.reciperecommendservice.domain.category.Category;
 import com.refrigeratorthief.reciperecommendservice.domain.ingredient.Ingredient;
@@ -18,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Component
@@ -30,15 +33,21 @@ public class TestUtils {
     private final User testUser;
     private final User testUser2;
     private final LocalDateTime testDateTime = LocalDateTime.parse("2023-05-05 11:11:11", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
     private final LocalDateTime testDateTime2 = LocalDateTime.parse("2023-05-20 23:13:02", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     private final LocalDateTime testDateTime3 = LocalDateTime.parse("2022-05-05 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
     private final Category testCategory;
     private final Board testBoard;
+    private final Board testBoard2;
 
     private final IngredientUnit testIngredientUnit;
+    private final IngredientUnit testIngredientUnit2;
     private final Ingredient testIngredient;
+    private final Ingredient testIngredient2;
     private final Refrigerator testRef;
+    private final Refrigerator testRef2;
+    private final Refrigerator testRef3;
 
     public TestUtils() {
 
@@ -75,25 +84,82 @@ public class TestUtils {
                 .category(testCategory)
                 .user(testUser2)
                 .build();
+        testBoard2 = Board.builder()
+                .id(3)
+                .title("토마토 1개 팔아요")
+                .content("토마토 1개 팝니다.")
+                .type("거래")
+                .img("tomato.jpg")
+                .createdDateTime(testDateTime)
+                .updatedDateTime(testDateTime2)
+                .category(testCategory)
+                .user(testUser)
+                .build();
 
         testIngredientUnit = IngredientUnit.builder()
-                .id(5)
+                .id(1)
                 .name("개")
+                .build();
+
+        testIngredientUnit2 = IngredientUnit.builder()
+                .id(2)
+                .name("근")
                 .build();
 
         testIngredient = Ingredient.builder()
                 .id(1)
                 .name("당근")
+                .img("carrot.jpg")
                 .unit(testIngredientUnit)
+                .build();
+
+        testIngredient2 = Ingredient.builder()
+                .id(2)
+                .name("소고기")
+                .img("beef.jpg")
+                .unit(testIngredientUnit2)
                 .build();
 
         testRef = Refrigerator.builder()
                 .id(1)
                 .expirationDate(testDate4)
                 .quantity(3)
-                .location("정왕")
+                .location("실온")
                 .user(testUser2)
                 .ingredient(testIngredient)
                 .build();
+
+        testRef2 = Refrigerator.builder()
+                .id(2)
+                .expirationDate(testDate4)
+                .quantity(5)
+                .location("냉장")
+                .user(testUser)
+                .ingredient(testIngredient)
+                .build();
+
+        testRef3 = Refrigerator.builder()
+                .id(3)
+                .expirationDate(testDate4)
+                .quantity(2)
+                .location("냉동")
+                .user(testUser)
+                .ingredient(testIngredient2)
+                .build();
+    }
+
+    public boolean isListSame(List<?> targetListA , List<?> targetListB){
+
+        if(targetListA.size() != targetListB.size()) return false;
+        for (int i = 0; i < targetListA.size(); i++) {
+            try{
+                targetListA.indexOf(targetListB.get(i));
+            }catch (Exception e){
+                logger.debug("{}",targetListA.get(i).toString());
+                logger.debug("{}",targetListB.get(i).toString());
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -23,8 +23,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -71,13 +72,11 @@ class BoardControllerTest {
                 .content(testUtils.getTestBoard().getContent())
                 .img(testUtils.getTestBoard().getImg())
                 .type(testUtils.getTestBoard().getType())
-                .createdDateTime(testUtils.getTestBoard().getCreatedDateTime())
-                .updatedDateTime(testUtils.getTestBoard().getUpdatedDateTime())
-                .category(testUtils.getTestBoard().getCategory().getId())
-                .user(testUtils.getTestBoard().getUser().getId())
+                .categoryId(testUtils.getTestBoard().getCategory().getId())
+                .userId(testUtils.getTestBoard().getUser().getId())
                 .build();
 
-        BoardAddServiceResponseDto boardAddServiceResponseDto = BoardAddServiceResponseDto
+        BoardServiceResponseDto boardServiceResponseDto = BoardServiceResponseDto
                 .builder()
                 .id(testUtils.getTestBoard().getId())
                 .title(testUtils.getTestBoard().getTitle())
@@ -86,12 +85,12 @@ class BoardControllerTest {
                 .type(testUtils.getTestBoard().getType())
                 .createdDateTime(testUtils.getTestBoard().getCreatedDateTime())
                 .updatedDateTime(testUtils.getTestBoard().getUpdatedDateTime())
-                .category(testUtils.getTestBoard().getCategory().getName())
-                .user(testUtils.getTestBoard().getUser().getName())
+                .category(testUtils.getTestBoard().getCategory())
+                .user(testUtils.getTestBoard().getUser())
                 .build();
 
-        doReturn(boardAddServiceResponseDto).when(boardService).addBoard(any(BoardAddServiceRequestDto.class));
-
+        doReturn(boardServiceResponseDto).when(boardService).addBoard(any(BoardAddServiceRequestDto.class));
+      
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.post("/api/v1/board")
@@ -106,11 +105,9 @@ class BoardControllerTest {
                                 fieldWithPath("title").description("대상 board의 제목"),
                                 fieldWithPath("content").description("대상 board의 내용"),
                                 fieldWithPath("img").description("대상 board의 이미지"),
-                                fieldWithPath("type").description("대상 board의 type"),
-                                fieldWithPath("createdDateTime").description("대상 생성시간"),
-                                fieldWithPath("updatedDateTime").description("대상 수정시간"),
-                                fieldWithPath("category").description("대상 board의 카테고리"),
-                                fieldWithPath("user").description("대상 board의 작성자")
+                                fieldWithPath("type").description("대상 board의 type (자유/거래)"),
+                                fieldWithPath("category_id").description("대상 board의 카테고리 id(음식자랑,일상,질문글,기타 / 살게요,팔게요,나눔해요,공구해요)"),
+                                fieldWithPath("user_id").description("대상 board의 작성자 id")
                         ),
                         responseFields(
                                 fieldWithPath("id").description("게시 완료된 board의 id (PK)"),
@@ -118,16 +115,18 @@ class BoardControllerTest {
                                 fieldWithPath("content").description("게시 완료된 board의 내용"),
                                 fieldWithPath("img").description("게시 완료된 board의 이미지"),
                                 fieldWithPath("type").description("게시 완료된 board의 type"),
-                                fieldWithPath("createdDateTime").description("게시 완료된 board의 생성시간"),
-                                fieldWithPath("updatedDateTime").description("게시 완료된 board의 수정시간"),
-                                fieldWithPath("category").description("게시 완료된 board의 카테고리"),
-                                fieldWithPath("user").description("게시 완료된 board의 작성자")
+                                fieldWithPath("created_date_time").description("게시 완료된 board의 생성시간"),
+                                fieldWithPath("updated_date_time").description("게시 완료된 board의 수정시간"),
+                                fieldWithPath("category_id").description("게시 완료된 board의 카테고리 id"),
+                                fieldWithPath("category_name").description("게시 완료된 board의 카테고리 이름"),
+                                fieldWithPath("user_id").description("게시 완료된 board의 작성자 id"),
+                                fieldWithPath("user_name").description("게시 완료된 board의 작성자 이름")
                                 )
                 ));
 
         //then
         result.andExpect(status().isOk())
-            .andExpect(content().json(objectMapper.writeValueAsString(boardAddServiceResponseDto.toControllerDto(boardAddServiceResponseDto))));
+            .andExpect(content().json(objectMapper.writeValueAsString(boardServiceResponseDto.toControllerDto())));
         verify(boardService).addBoard(any(BoardAddServiceRequestDto.class));
     }
 
@@ -145,12 +144,12 @@ class BoardControllerTest {
                 .type(testUtils.getTestBoard().getType())
                 .createdDateTime(testUtils.getTestBoard().getCreatedDateTime())
                 .updatedDateTime(testUtils.getTestBoard().getUpdatedDateTime())
-                .category(testUtils.getTestBoard().getCategory().getName())
-                .user(testUtils.getTestBoard().getUser().getName())
+                .category(testUtils.getTestBoard().getCategory())
+                .user(testUtils.getTestBoard().getUser())
                 .build();
 
         doReturn(boardServiceResponseDto).when(boardService).getBoard(id);
-
+      
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.get("/api/v1/board/{id}", id)
@@ -169,16 +168,18 @@ class BoardControllerTest {
                                 fieldWithPath("content").description("조회 완료된 board의 내용"),
                                 fieldWithPath("img").description("조회 완료된 board의 이미지"),
                                 fieldWithPath("type").description("조회 완료된 board의 type"),
-                                fieldWithPath("createdDateTime").description("조회 완료된 생성시간"),
-                                fieldWithPath("updatedDateTime").description("조회 완료된 수정시간"),
-                                fieldWithPath("category").description("조회 완료된 board의 카테고리"),
-                                fieldWithPath("user").description("조회 완료된 board의 작성자")
+                                fieldWithPath("created_date_time").description("조회 완료된 board의 생성시간"),
+                                fieldWithPath("updated_date_time").description("조회 완료된 board의 수정시간"),
+                                fieldWithPath("category_id").description("조회 완료된 board의 카테고리 id"),
+                                fieldWithPath("category_name").description("조회 완료된 board의 카테고리 이름"),
+                                fieldWithPath("user_id").description("조회 완료된 board의 작성자 id"),
+                                fieldWithPath("user_name").description("조회 완료된 board의 작성자 이름")
                         )
                 ));
 
         //then
         result.andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(boardServiceResponseDto.toControllerDto(boardServiceResponseDto))));
+                .andExpect(content().json(objectMapper.writeValueAsString(boardServiceResponseDto.toControllerDto())));
         verify(boardService).getBoard(id);
     }
 
@@ -192,10 +193,8 @@ class BoardControllerTest {
                 .content(testUtils.getTestBoard().getContent())
                 .img(testUtils.getTestBoard().getImg())
                 .type(testUtils.getTestBoard().getType())
-                .createdDateTime(testUtils.getTestBoard().getCreatedDateTime())
-                .updatedDateTime(testUtils.getTestBoard().getUpdatedDateTime())
-                .category(testUtils.getTestBoard().getCategory().getId())
-                .user(testUtils.getTestBoard().getUser().getId())
+                .categoryId(testUtils.getTestBoard().getCategory().getId())
+                .userId(testUtils.getTestBoard().getUser().getId())
                 .build();
 
         BoardUpdateServiceResponseDto boardUpdateServiceResponseDto = BoardUpdateServiceResponseDto
@@ -207,8 +206,10 @@ class BoardControllerTest {
                 .type(testUtils.getTestBoard().getType())
                 .createdDateTime(testUtils.getTestBoard().getCreatedDateTime())
                 .updatedDateTime(testUtils.getTestBoard().getUpdatedDateTime())
-                .category(testUtils.getTestBoard().getCategory().getName())
-                .user(testUtils.getTestBoard().getUser().getName())
+                .categoryId(testUtils.getTestBoard().getCategory().getId())
+                .categoryName(testUtils.getTestBoard().getCategory().getName())
+                .userId(testUtils.getTestBoard().getUser().getId())
+                .userName(testUtils.getTestBoard().getUser().getName())
                 .build();
 
         doReturn(boardUpdateServiceResponseDto).when(boardService).updateBoard(any(BoardUpdateServiceRequestDto.class));
@@ -228,14 +229,12 @@ class BoardControllerTest {
                                 fieldWithPath("title").description("대상 board의 제목"),
                                 fieldWithPath("content").description("대상 board의 내용"),
                                 fieldWithPath("img").description("대상 board의 이미지"),
-                                fieldWithPath("type").description("대상 board의 type"),
-                                fieldWithPath("createdDateTime").description("대상 생성시간"),
-                                fieldWithPath("updatedDateTime").description("대상 수정시간"),
-                                fieldWithPath("category").description("대상 board의 카테고리"),
-                                fieldWithPath("user").description("대상 board의 작성자")
+                                fieldWithPath("type").description("대상 board의 type (자유/거래)"),
+                                fieldWithPath("category_id").description("대상 board의 카테고리 id"),
+                                fieldWithPath("user_id").description("대상 board의 작성자 유저 id")
                         ),
                         responseFields(
-                                fieldWithPath("message").description("수정 완료된 board의 id (PK)")
+                                fieldWithPath("message").description("수정 완료 안내 메시지")
                         )
                 ));
 
@@ -269,7 +268,7 @@ class BoardControllerTest {
                                 parameterWithName("id").description("대상 board의 id (PK)")
                         ),
                         responseFields(
-                                fieldWithPath("message").description("삭제 완료된 board의 id (PK)")
+                                fieldWithPath("message").description("삭제 완료된 안내 메시지")
                         )
                 ));
 
@@ -283,22 +282,16 @@ class BoardControllerTest {
     @Test
     void findBoardsByCategory() throws Exception {
         //given
-        Integer categoryId = testUtils.getTestBoard().getCategory().getId();
+        Integer categoryId = 1;
+        List<BoardServiceResponseDto> targetBoardList = new ArrayList<>();
 
-        BoardServiceResponseDto boardServiceResponseDto = BoardServiceResponseDto
-                .builder()
-                .id(testUtils.getTestBoard().getId())
-                .title(testUtils.getTestBoard().getTitle())
-                .content(testUtils.getTestBoard().getContent())
-                .img(testUtils.getTestBoard().getImg())
-                .type(testUtils.getTestBoard().getType())
-                .createdDateTime(testUtils.getTestBoard().getCreatedDateTime())
-                .updatedDateTime(testUtils.getTestBoard().getUpdatedDateTime())
-                .category(testUtils.getTestBoard().getCategory().getName())
-                .user(testUtils.getTestBoard().getUser().getName())
-                .build();
+        BoardServiceResponseDto targetBoardDto1 = new BoardServiceResponseDto(testUtils.getTestBoard());
+        targetBoardList.add(targetBoardDto1);
 
-        doReturn(List.of(boardServiceResponseDto)).when(boardService).findBoardsByCategory(categoryId);
+        BoardServiceResponseDto targetBoardDto2 = new BoardServiceResponseDto(testUtils.getTestBoard2());
+        targetBoardList.add(targetBoardDto2);
+
+        doReturn(targetBoardList).when(boardService).findBoardsByCategory(categoryId);
 
         //when
         ResultActions result = mvc.perform(
@@ -306,7 +299,7 @@ class BoardControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andDo(document("boards-get",
+                .andDo(document("boards-get-by-category",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -318,16 +311,17 @@ class BoardControllerTest {
                                         fieldWithPath("[].content").description("조회 완료된 board의 내용"),
                                         fieldWithPath("[].img").description("조회 완료된 board의 이미지"),
                                         fieldWithPath("[].type").description("조회 완료된 board의 type"),
-                                        fieldWithPath("[].createdDateTime").description("조회 완료된 생성시간"),
-                                        fieldWithPath("[].updatedDateTime").description("조회 완료된 수정시간"),
-                                        fieldWithPath("[].category").description("조회 완료된 board의 카테고리"),
-                                        fieldWithPath("[].user").description("조회 완료된 board의 작성자")
+                                        fieldWithPath("[].created_date_time").description("조회 완료된 생성시간"),
+                                        fieldWithPath("[].updated_date_time").description("조회 완료된 수정시간"),
+                                        fieldWithPath("[].user_id").description("조회 완료된 board의 작성자 id"),
+                                        fieldWithPath("[].user_name").description("조회 완료된 board의 작성자 name")
                         )
                 ));
 
         //then
         result.andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(List.of(boardServiceResponseDto))));
+                .andExpect(content().json(objectMapper.writeValueAsString(targetBoardList.stream().map(BoardServiceResponseDto::toCategoryControllerDto).collect(Collectors.toList()))));
         verify(boardService).findBoardsByCategory(categoryId);
     }
+
 }

@@ -179,6 +179,7 @@ public class UserServiceTest {
 
         // then
         assertEquals("동일한 id가 존재합니다!",result.getMessage());
+        verify(userRepository).existsUserById(testId);
     }
 
     @Test
@@ -246,6 +247,7 @@ public class UserServiceTest {
 
         //then
         assertEquals("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요!",result.getMessage());
+        verify(userRepository).findUserById(testId);
     }
 
     @Test
@@ -269,6 +271,7 @@ public class UserServiceTest {
 
         //then
         assertEquals("비밀번호를 다시 확인해주세요!",result.getMessage());
+        verify(userRepository).findUserById(testId);
 
     }
 
@@ -294,5 +297,6 @@ public class UserServiceTest {
 
         //then
         assertEquals("비밀번호가 일치하지 않습니다. 비밀번호를 다시 확인해주세요!",result.getMessage());
+        verify(userRepository).findUserById(testId);
     }
 }

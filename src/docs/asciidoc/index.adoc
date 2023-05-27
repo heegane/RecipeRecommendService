@@ -1,0 +1,13 @@
+= Recipe Recommend System
+Rest Api Docs
+:doctype: book
+:icons: front
+:source-highlighter: highlightjs
+:toc: lest
+:toclevels: 1
+:sectlinks:
+
+include::User-API.adoc[]
+include::Ingredient-API.adoc[]
+include::Refrigerator-API.adoc[]
+include::Board-API.adoc[]
