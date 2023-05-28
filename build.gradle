@@ -93,7 +93,7 @@ asciidoctor.doFirst {
 task copyDocument(type: Copy) {
     dependsOn asciidoctor
     from file("build/docs/asciidoc")
-    into file("C:\\Users\\dlgus\\IdeaProjects\\RecipeRecommendService")
+//    into file("C:\\Users\\dlgus\\IdeaProjects\\RecipeRecommendService")
 }
 
 bootJar {

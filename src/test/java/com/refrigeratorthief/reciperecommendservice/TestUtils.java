@@ -1,9 +1,8 @@
 package com.refrigeratorthief.reciperecommendservice;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.refrigeratorthief.reciperecommendservice.domain.board.Board;
 import com.refrigeratorthief.reciperecommendservice.domain.category.Category;
+import com.refrigeratorthief.reciperecommendservice.domain.comment.Comment;
 import com.refrigeratorthief.reciperecommendservice.domain.ingredient.Ingredient;
 import com.refrigeratorthief.reciperecommendservice.domain.ingredientUnit.IngredientUnit;
 import com.refrigeratorthief.reciperecommendservice.domain.refrigerator.Refrigerator;
@@ -11,11 +10,8 @@ import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,6 +44,9 @@ public class TestUtils {
     private final Refrigerator testRef;
     private final Refrigerator testRef2;
     private final Refrigerator testRef3;
+
+    private final Comment testComment;
+    private final Comment testComment2;
 
     public TestUtils() {
 
@@ -145,6 +144,25 @@ public class TestUtils {
                 .location("냉동")
                 .user(testUser)
                 .ingredient(testIngredient2)
+                .build();
+
+        testComment = Comment.builder()
+                .id(2)
+                .upperId(1)
+                .content("콘텐츠")
+                .createdDateTime(testDateTime)
+                .updatedDateTime(testDateTime2)
+                .user(testUser2)
+                .board(testBoard)
+                .build();
+        testComment2 = Comment.builder()
+                .id(3)
+                .upperId(2)
+                .content("내용")
+                .createdDateTime(testDateTime)
+                .updatedDateTime(testDateTime2)
+                .user(testUser)
+                .board(testBoard)
                 .build();
     }
 
