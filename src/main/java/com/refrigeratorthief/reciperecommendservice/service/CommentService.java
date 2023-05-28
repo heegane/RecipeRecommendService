@@ -33,7 +33,7 @@ public class CommentService {
     public CommentServiceResponseDto addComment(CommentAddServiceRequestDto commentAddServiceRequestDto) {
 
         User targetUser = userRepository.findUserById(commentAddServiceRequestDto.getUser().getId())
-                .orElseThrow(()->new CustomException("해당하는 id의 유저가 존재하지 않습니다."));
+                .orElseThrow(()->new CustomException("해당하는 유저가 존재하지 않습니다."));
         Board targetBoard = boardRepository.findById(commentAddServiceRequestDto.getBoard().getId())
                 .orElseThrow(()->new CustomException("해당하는 게시글이 존재하지 않습니다."));
 

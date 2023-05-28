@@ -1,0 +1,55 @@
+[[Comment-API]]
+= Comment-API
+댓글 생성, 댓글 수정, 댓글 삭제, 게시글 id 받아서 해당하는 댓글 다 조회를 할 수 있는 api입니다.
+
+[[Comment-Add]]
+== POST : /api/v1/comment
+=== 단일 댓글을 추가
+
+operation::comment-post[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response']
+
+=== 예외 처리
+1. 입력한 user_name에 해당하는 유저가 없을 때
+
+    "message" : "해당하는 유저가 존재하지 않습니다."
+
+2. 입력한 board_id에 해당하는 게시글이 없을 때
+
+    "message" : "해당하는 게시글이 존재하지 않습니다."
+
+[[Comment-Update]]
+== PUT : /api/v1/comment
+=== 단일 댓글을 수정
+
+operation::comment-update[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response']
+
+=== 예외 처리
+1. 입력한 id에 해당하는 댓글이 없을 때
+
+    "message" : "해당하는 댓글이 존재하지 않습니다."
+
+2. 해당 댓글 글쓴이가 아닐 때
+
+    "message" : "댓글 수정 권한이 없습니다."
+
+[[Comment-Delete]]
+== DELETE : /api/v1/comment/{id}
+=== 단일 댓글을 삭제
+
+operation::comment-delete[snippets='path-parameters,response-fields,response-body,http-request,http-response']
+
+=== 예외 처리
+1. 입력한 id에 해당하는 댓글이 없을 때
+
+    "message" : "해당하는 댓글이 존재하지 않습니다."
+
+[[Comment-Get-By-Board]]
+== GET : /api/v1/comment/{boardId}
+=== 단일 게시글의 모든 댓글을 조회
+
+operation::comment-get-by-board[snippets='path-parameters,response-fields,response-body,http-request,http-response']
+
+=== 예외 처리
+1. 입력한 board_id에 해당하는 게시글에 달린 댓글이 없을 때
+
+    "message" : "해당하는 댓글이 존재하지 않습니다."
