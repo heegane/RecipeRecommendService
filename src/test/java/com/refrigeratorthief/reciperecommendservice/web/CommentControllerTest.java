@@ -223,7 +223,7 @@ class CommentControllerTest {
                         ),
                         responseFields(
                                 fieldWithPath("[].id").description("조회된 comment의 id (PK)"),
-                                fieldWithPath("[].upper_id").description("조회된 comment의 상위 comment id"),
+                                fieldWithPath("[].upper_id").description("조회된 comment의 상위 comment id").optional(),
                                 fieldWithPath("[].content").description("조회된 comment의 내용"),
                                 fieldWithPath("[].created_date_time").description("조회된 comment의 생성시간"),
                                 fieldWithPath("[].updated_date_time").description("조회된 comment의 수정시간"),

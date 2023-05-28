@@ -82,6 +82,7 @@ class RefrigeratorRepositoryTest {
         User testUser = testUtils.getTestUser();
 
         List<Refrigerator> testGoal = new ArrayList<Refrigerator>();
+        testGoal.add(testUtils.getTestRef());
         testGoal.add(testUtils.getTestRef2());
         testGoal.add(testUtils.getTestRef3());
 

@@ -51,7 +51,7 @@ class BoardServiceTest {
                 .title(testUtils.getTestBoard().getTitle())
                 .content(testUtils.getTestBoard().getContent())
                 .img(testUtils.getTestBoard().getImg())
-                .type(testUtils.getTestBoard().getType())
+                .type("자유")
                 .category(testUtils.getTestBoard().getCategory())
                 .user(testUtils.getTestBoard().getUser())
                 .build();
@@ -131,7 +131,7 @@ class BoardServiceTest {
                 .title("수정된 타이틀")
                 .content(targetBoard.getContent())
                 .img(targetBoard.getImg())
-                .type(targetBoard.getType())
+                .type("자유")
                 .category(targetBoard.getCategory())
                 .user(targetBoard.getUser())
                 .build();

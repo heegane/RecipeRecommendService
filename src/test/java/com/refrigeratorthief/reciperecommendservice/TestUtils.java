@@ -26,11 +26,13 @@ public class TestUtils {
 
     private final LocalDate testDate;
     private final LocalDate testDate2;
+
     private final User testUser;
     private final User testUser2;
-    private final LocalDateTime testDateTime = LocalDateTime.parse("2023-05-05 11:11:11", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    private final User testUser3;
 
-    private final LocalDateTime testDateTime2 = LocalDateTime.parse("2023-05-20 23:13:02", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    private final LocalDateTime testDateTime = LocalDateTime.parse("2023-05-05 11:11:11", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    private final LocalDateTime testDateTime2 = LocalDateTime.parse("2023-05-06 11:11:11", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     private final LocalDateTime testDateTime3 = LocalDateTime.parse("2022-05-05 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
     private final Category testCategory;
@@ -39,14 +41,19 @@ public class TestUtils {
 
     private final IngredientUnit testIngredientUnit;
     private final IngredientUnit testIngredientUnit2;
+    private final IngredientUnit testIngredientUnit3;
+
     private final Ingredient testIngredient;
     private final Ingredient testIngredient2;
+    private final Ingredient testIngredient3;
+
     private final Refrigerator testRef;
     private final Refrigerator testRef2;
     private final Refrigerator testRef3;
 
     private final Comment testComment;
     private final Comment testComment2;
+    private final Comment testComment3;
 
     public TestUtils() {
 
@@ -62,35 +69,45 @@ public class TestUtils {
                 .dong("상록구")
                 .build();
         testUser2 = User.builder()
-                .id("choiyun")
+                .id("yun")
                 .name("윤이")
-                .pw("123")
-                .city("시흥시")
+                .pw("yun")
+                .city("경기도 안산시")
                 .dong("정왕동")
                 .build();
+        testUser3 = User.builder()
+                .id("hyeon")
+                .name("현희")
+                .pw("hyeon")
+                .city("경기도 안산시")
+                .dong("고잔동")
+                .build();
+
         testCategory = Category.builder()
                 .id(1)
-                .name("팔게요")
+                .name("음식자랑")
                 .build();
+
         testBoard = Board.builder()
-                .id(2)
-                .title("수정")
-                .content("내용")
-                .img("112233")
-                .type("거래")
+                .id(1)
+                .title("내가 만든 쿠키")
+                .content("맛있겠쥐")
+                .img("cookie.jpg")
+                .type("자유")
                 .createdDateTime(testDateTime)
-                .updatedDateTime(testDateTime2)
+                .updatedDateTime(testDateTime)
                 .category(testCategory)
                 .user(testUser2)
                 .build();
+
         testBoard2 = Board.builder()
-                .id(3)
-                .title("토마토 1개 팔아요")
-                .content("토마토 1개 팝니다.")
-                .type("거래")
-                .img("tomato.jpg")
+                .id(2)
+                .title("참치 야채 비빔밥")
+                .content("고추장 많이")
+                .type("자유")
+                .img("bibim.jpg")
                 .createdDateTime(testDateTime)
-                .updatedDateTime(testDateTime2)
+                .updatedDateTime(testDateTime)
                 .category(testCategory)
                 .user(testUser)
                 .build();
@@ -99,10 +116,13 @@ public class TestUtils {
                 .id(1)
                 .name("개")
                 .build();
-
         testIngredientUnit2 = IngredientUnit.builder()
                 .id(2)
                 .name("근")
+                .build();
+        testIngredientUnit3 = IngredientUnit.builder()
+                .id(3)
+                .name("알")
                 .build();
 
         testIngredient = Ingredient.builder()
@@ -111,23 +131,27 @@ public class TestUtils {
                 .img("carrot.jpg")
                 .unit(testIngredientUnit)
                 .build();
-
         testIngredient2 = Ingredient.builder()
                 .id(2)
                 .name("소고기")
                 .img("beef.jpg")
                 .unit(testIngredientUnit2)
                 .build();
+        testIngredient3 = Ingredient.builder()
+                .id(3)
+                .name("감자")
+                .img("potato.jpg")
+                .unit(testIngredientUnit3)
+                .build();
 
         testRef = Refrigerator.builder()
                 .id(1)
                 .expirationDate(testDate4)
-                .quantity(3)
-                .location("실온")
-                .user(testUser2)
-                .ingredient(testIngredient)
+                .quantity(5)
+                .location("냉장")
+                .user(testUser)
+                .ingredient(testIngredient3)
                 .build();
-
         testRef2 = Refrigerator.builder()
                 .id(2)
                 .expirationDate(testDate4)
@@ -136,7 +160,6 @@ public class TestUtils {
                 .user(testUser)
                 .ingredient(testIngredient)
                 .build();
-
         testRef3 = Refrigerator.builder()
                 .id(3)
                 .expirationDate(testDate4)
@@ -147,20 +170,29 @@ public class TestUtils {
                 .build();
 
         testComment = Comment.builder()
+                .id(1)
+                .upperId(null)
+                .content("레시피 공유좀")
+                .createdDateTime(testDateTime)
+                .updatedDateTime(testDateTime)
+                .user(testUser3)
+                .board(testBoard)
+                .build();
+        testComment2 = Comment.builder()
                 .id(2)
                 .upperId(1)
-                .content("콘텐츠")
-                .createdDateTime(testDateTime)
+                .content("기달 공유해드림")
+                .createdDateTime(testDateTime2)
                 .updatedDateTime(testDateTime2)
                 .user(testUser2)
                 .board(testBoard)
                 .build();
-        testComment2 = Comment.builder()
+        testComment3 = Comment.builder()
                 .id(3)
-                .upperId(2)
-                .content("내용")
+                .upperId(null)
+                .content("우왕 맛있겠다")
                 .createdDateTime(testDateTime)
-                .updatedDateTime(testDateTime2)
+                .updatedDateTime(testDateTime)
                 .user(testUser)
                 .board(testBoard)
                 .build();

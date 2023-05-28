@@ -76,6 +76,7 @@ class IngredientRepositoryTest {
         List<Ingredient> testGoal = new ArrayList<>();
         testGoal.add(testUtils.getTestIngredient());
         testGoal.add(testUtils.getTestIngredient2());
+        testGoal.add(testUtils.getTestIngredient3());
 
         //when
         List<Ingredient> results = ingredientRepository.findAllBy()

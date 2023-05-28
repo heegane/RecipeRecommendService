@@ -37,6 +37,7 @@ class BoardRepositoryTest {
     private CategoryRepository categoryRepository;
     @Autowired
     private BoardRepository boardRepository;
+
     @Test
     void save() {
         //given
