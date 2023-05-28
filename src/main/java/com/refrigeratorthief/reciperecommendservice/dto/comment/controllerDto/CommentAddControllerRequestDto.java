@@ -16,15 +16,15 @@ import lombok.*;
 public class CommentAddControllerRequestDto {
     private Integer upperId;
     private String content;
-    private String user;
-    private Integer board;
+    private String userId;
+    private Integer boardId;
 
     public CommentAddServiceRequestDto toServiceDto() {
         return CommentAddServiceRequestDto.builder()
                 .upperId(upperId)
                 .content(content)
-                .user(User.builder().id(user).build())
-                .board(Board.builder().id(board).build())
+                .user(User.builder().id(userId).build())
+                .board(Board.builder().id(boardId).build())
                 .build();
     }
 }

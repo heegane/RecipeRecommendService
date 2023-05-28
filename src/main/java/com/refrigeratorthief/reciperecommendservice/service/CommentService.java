@@ -54,8 +54,8 @@ public class CommentService {
                 .content(targetComment.getContent())
                 .createdDateTime(targetComment.getCreatedDateTime())
                 .updatedDateTime(targetComment.getUpdatedDateTime())
-                .user(targetComment.getUser().getName())
-                .board(targetComment.getBoard().getId())
+                .userName(targetComment.getUser().getName())
+                .boardId(targetComment.getBoard().getId())
                 .build();
     }
 
@@ -105,8 +105,8 @@ public class CommentService {
                     .content(comments.getContent())
                     .createdDateTime(comments.getCreatedDateTime())
                     .updatedDateTime(comments.getUpdatedDateTime())
-                    .user(comments.getUser().getName())
-                    .board(comments.getBoard().getId())
+                    .userName(comments.getUser().getName())
+                    .boardId(comments.getBoard().getId())
                     .build();
             dtoList.add(dto);
         }
