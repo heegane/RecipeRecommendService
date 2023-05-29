@@ -2,7 +2,9 @@ package com.refrigeratorthief.reciperecommendservice.dto.Ingredient.controllerDt
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.refrigeratorthief.reciperecommendservice.domain.ingredient.Ingredient;
 import com.refrigeratorthief.reciperecommendservice.domain.ingredientUnit.IngredientUnit;
+import com.refrigeratorthief.reciperecommendservice.domain.refrigerator.Refrigerator;
 import com.refrigeratorthief.reciperecommendservice.dto.Ingredient.serviceDto.IngredientAddRequestServiceDto;
 import lombok.*;
 
@@ -30,6 +32,13 @@ public class IngredientAddRequestControllerDto {
                 .name(name)
                 .img(img)
                 .ingredientUnit(IngredientUnit.builder().id(ingredientUnitId).build())
+                .build();
+    }
+    public Ingredient toEntity() {
+        return Ingredient.builder()
+                .name(name)
+                .img(img)
+                .unit(IngredientUnit.builder().id(ingredientUnitId).build())
                 .build();
     }
 }
