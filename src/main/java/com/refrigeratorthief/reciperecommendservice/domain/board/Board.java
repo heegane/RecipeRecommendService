@@ -32,7 +32,7 @@ public class Board {
     @Column(name = "BOARD_CONTENT", length = 1000, nullable = false)
     private String content;
 
-    @Column(name = "BOARD_IMG", length = 100)
+    @Column(name = "BOARD_IMG", length = 500)
     private String img;
 
     @Column(name = "BOARD_TYPE", length = 2, nullable = false)

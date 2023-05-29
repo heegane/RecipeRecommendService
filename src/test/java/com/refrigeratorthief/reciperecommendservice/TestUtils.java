@@ -128,19 +128,19 @@ public class TestUtils {
         testIngredient = Ingredient.builder()
                 .id(1)
                 .name("당근")
-                .img("carrot.jpg")
+                .img("https://fridgethief.s3.ap-northeast-2.amazonaws.com/ingredient/41836ff1-df5c-4d2d-ac1f-f77fed928869%E1%84%83%E1%85%A1%E1%86%BC%E1%84%80%E1%85%B3%E1%86%AB.png")
                 .unit(testIngredientUnit)
                 .build();
         testIngredient2 = Ingredient.builder()
                 .id(2)
                 .name("소고기")
-                .img("beef.jpg")
+                .img("https://fridgethief.s3.ap-northeast-2.amazonaws.com/ingredient/85836028-633f-49b0-be80-7cc43a8bd752%E1%84%89%E1%85%A1%E1%86%B7%E1%84%80%E1%85%A7%E1%86%B8%E1%84%89%E1%85%A1%E1%86%AF.png")
                 .unit(testIngredientUnit2)
                 .build();
         testIngredient3 = Ingredient.builder()
                 .id(3)
                 .name("감자")
-                .img("potato.jpg")
+                .img("https://fridgethief.s3.ap-northeast-2.amazonaws.com/ingredient/a8d0c3b3-63d6-48f4-85bc-c1317275fe64%E1%84%80%E1%85%A1%E1%86%B7%E1%84%8C%E1%85%A1.png")
                 .unit(testIngredientUnit3)
                 .build();
 

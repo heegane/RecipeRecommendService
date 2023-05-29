@@ -25,7 +25,7 @@ public class Ingredient {
     @Column(name = "INGREDIENT_NM", length = 45, nullable = false, unique = true)
     private String name;
 
-    @Column(name = "INGREDIENT_IMG", length = 100)
+    @Column(name = "INGREDIENT_IMG", length = 500)
     private String img;
 
     @ManyToOne(fetch = FetchType.LAZY)
