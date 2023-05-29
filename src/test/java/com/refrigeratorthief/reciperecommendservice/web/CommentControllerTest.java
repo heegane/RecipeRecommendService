@@ -105,14 +105,14 @@ class CommentControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
-                                fieldWithPath("upper_id").description("대상 comment의 상위 comment id"),
+                                fieldWithPath("upper_id").description("대상 comment의 상위 comment id").optional(),
                                 fieldWithPath("content").description("대상 comment의 내용"),
                                 fieldWithPath("user_id").description("대상 comment의 작성자 id"),
                                 fieldWithPath("board_id").description("대상 comment의 게시글 id")
                         ),
                         responseFields(
                                 fieldWithPath("id").description("등록 완료된 comment의 id (PK)"),
-                                fieldWithPath("upper_id").description("등록 완료된 comment의 상위 comment id"),
+                                fieldWithPath("upper_id").description("등록 완료된 comment의 상위 comment id").optional(),
                                 fieldWithPath("content").description("등록 완료된 comment의 내용"),
                                 fieldWithPath("created_date_time").description("등록 완료된 comment의 생성시간"),
                                 fieldWithPath("updated_date_time").description("등록 완료된 comment의 수정시간"),

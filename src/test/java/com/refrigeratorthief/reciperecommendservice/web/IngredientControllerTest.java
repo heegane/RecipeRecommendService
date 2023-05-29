@@ -91,7 +91,7 @@ public class IngredientControllerTest {
                         responseFields(
                                 fieldWithPath("[].id").description("조회된 재료 id (PK)"),
                                 fieldWithPath("[].name").description("조회된 재료 이름"),
-                                fieldWithPath("[].img").description("조회된 재료 사진 경로")
+                                fieldWithPath("[].img").description("조회된 재료 사진 경로").optional()
                         )
                 ));
 
@@ -135,13 +135,13 @@ public class IngredientControllerTest {
                         preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("name").description("직접 추가할 재료의 이름"),
-                                fieldWithPath("img").description("직접 추가할 재료의 사진 경로"),
+                                fieldWithPath("img").description("직접 추가할 재료의 사진 경로").optional(),
                                 fieldWithPath("ingredient_unit_id").description("직접 추가할 재료의 단위")
                         ),
                         responseFields(
                                 fieldWithPath("id").description("추가 완료된 재료의 id (PK)"),
                                 fieldWithPath("name").description("추가 완료된 재료의 이름"),
-                                fieldWithPath("img").description("추가 완료된 재료의 사진 경로"),
+                                fieldWithPath("img").description("추가 완료된 재료의 사진 경로").optional(),
                                 fieldWithPath("ingredient_unit_id").description("추가 완료된 재료의 단위 id"),
                                 fieldWithPath("ingredient_unit_name").description("추가 완료된 재료의 단위 이름")
                         )
