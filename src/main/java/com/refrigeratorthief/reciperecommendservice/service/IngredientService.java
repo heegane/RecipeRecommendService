@@ -6,6 +6,7 @@ import com.refrigeratorthief.reciperecommendservice.domain.ingredientUnit.Ingred
 import com.refrigeratorthief.reciperecommendservice.domain.ingredientUnit.IngredientUnitRepository;
 import com.refrigeratorthief.reciperecommendservice.dto.Ingredient.serviceDto.IngredientAddRequestServiceDto;
 import com.refrigeratorthief.reciperecommendservice.dto.Ingredient.serviceDto.IngredientResponseServiceDto;
+import com.refrigeratorthief.reciperecommendservice.s3.S3Uploader;
 import com.refrigeratorthief.reciperecommendservice.utils.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -13,9 +14,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.amazonaws.util.AWSRequestMetrics.Field.StatusCode;
 
 @RequiredArgsConstructor
 @Service
@@ -24,6 +29,8 @@ public class IngredientService {
     private final int batchSize = 100;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    private final S3Uploader s3Uploader;
     @Autowired
     private final IngredientRepository ingredientRepository;
 
@@ -52,5 +59,12 @@ public class IngredientService {
 
         Ingredient result = ingredientRepository.save(ingredientAddRequestServiceDto.toEntity(targetIngredientUnit));
         return new IngredientResponseServiceDto(result);
+    }
+
+    @Transactional
+    public void imgSave(Ingredient ingredient, MultipartFile multipartFile) throws IOException {
+        if (multipartFile != null) {
+            ingredient.setImg(s3Uploader.uploadFiles(multipartFile, "ingredient"));
+        }
     }
 }

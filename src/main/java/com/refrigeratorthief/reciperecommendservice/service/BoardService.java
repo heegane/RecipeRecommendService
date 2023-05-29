@@ -1,5 +1,6 @@
 package com.refrigeratorthief.reciperecommendservice.service;
 
+import com.refrigeratorthief.reciperecommendservice.domain.ingredient.Ingredient;
 import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import com.refrigeratorthief.reciperecommendservice.domain.user.UserRepository;
 import com.refrigeratorthief.reciperecommendservice.domain.category.Category;
@@ -7,12 +8,15 @@ import com.refrigeratorthief.reciperecommendservice.domain.board.Board;
 import com.refrigeratorthief.reciperecommendservice.domain.board.BoardRepository;
 import com.refrigeratorthief.reciperecommendservice.domain.category.CategoryRepository;
 import com.refrigeratorthief.reciperecommendservice.dto.board.serviceDto.*;
+import com.refrigeratorthief.reciperecommendservice.s3.S3Uploader;
 import com.refrigeratorthief.reciperecommendservice.utils.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,8 @@ public class BoardService {
     private final CategoryRepository categoryRepository;
     @Autowired
     private final UserRepository userRepository;
+    @Autowired
+    private final S3Uploader s3Uploader;
 
     // 게시글 저장
     @Transactional
@@ -131,4 +137,10 @@ public class BoardService {
         return dtoList;
     }
 
+    @Transactional
+    public void imgSave(Board board, MultipartFile multipartFile) throws IOException {
+        if (multipartFile != null) {
+            board.setImg(s3Uploader.uploadFiles(multipartFile, "board"));
+        }
+    }
 }
