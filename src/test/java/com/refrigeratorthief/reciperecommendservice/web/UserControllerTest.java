@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.refrigeratorthief.reciperecommendservice.TestUtils;
-import com.refrigeratorthief.reciperecommendservice.dto.user.controllerDto.UserDeleteRequestControllerDto;
-import com.refrigeratorthief.reciperecommendservice.dto.user.controllerDto.UserLoginRequestControllerDto;
-import com.refrigeratorthief.reciperecommendservice.dto.user.controllerDto.UserRegisterRequestControllerDto;
+import com.refrigeratorthief.reciperecommendservice.dto.user.controllerDto.*;
 import com.refrigeratorthief.reciperecommendservice.dto.user.serviceDto.UserDeleteRequestServiceDto;
 import com.refrigeratorthief.reciperecommendservice.dto.user.serviceDto.UserLoginRequestServiceDto;
 import com.refrigeratorthief.reciperecommendservice.dto.user.serviceDto.UserRegisterRequestServiceDto;
@@ -23,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -31,6 +30,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.booleanThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -152,6 +152,78 @@ public class UserControllerTest {
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(userRegisterRequestControllerDto.getName()));
         verify(userService).register(any(UserRegisterRequestServiceDto.class));
+    }
+
+    @Test
+    void checkUserId() throws Exception {
+        //given
+        String userId = testUtils.getTestUser().getName();
+
+        UserResponseServiceDto userResponseServiceDto = UserResponseServiceDto.builder()
+                .id(testUtils.getTestUser().getName())
+                .name(testUtils.getTestUser().getName())
+                .city(testUtils.getTestUser().getCity())
+                .dong(testUtils.getTestUser().getDong())
+                .build();
+
+        doReturn(userResponseServiceDto).when(userService).findById(userId);
+
+        //when
+        ResultActions result = mvc.perform(
+                        RestDocumentationRequestBuilders.get("/api/v1/user/id/check/{id}", userId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("user-check-user-id",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("조회 시도할 대상 user의 id (PK)")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("해당하는 id 존재 여부")
+                        )
+                ));
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true));
+        verify(userService).findById(userId);
+    }
+
+    @Test
+    void checkUserName() throws Exception {
+        //given
+        String userName = testUtils.getTestUser().getName();
+
+        UserResponseServiceDto userResponseServiceDto = UserResponseServiceDto.builder()
+                .id(testUtils.getTestUser().getName())
+                .name(testUtils.getTestUser().getName())
+                .city(testUtils.getTestUser().getCity())
+                .dong(testUtils.getTestUser().getDong())
+                .build();
+
+        doReturn(userResponseServiceDto).when(userService).findUserByName(userName);
+
+        //when
+        ResultActions result = mvc.perform(
+                        RestDocumentationRequestBuilders.get("/api/v1/user/name/check/{name}", userName)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("user-check-user-name",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("name").description("조회 시도할 대상 user의 name (PK)")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("해당하는 name 존재 여부")
+                        )
+                ));
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true));
+        verify(userService).findUserByName(userName);
     }
 
     @Test
