@@ -36,6 +36,44 @@ public class UserController {
         return ResponseEntity.ok(new UserNameResponseControllerDto(targetName));
     }
 
+    // id 중복확인
+    @GetMapping("/id/check/{id}")
+    public ResponseEntity<UserCheckResponseControllerDto> checkUserId(
+            @PathVariable String id){
+        try{
+            userService.findById(id);
+        } catch (Exception e) {
+            return ResponseEntity.ok(new UserCheckResponseControllerDto(false));
+        }
+        return ResponseEntity.ok(new UserCheckResponseControllerDto(true));
+        // 이미 존재한다면 true, 아니라면 false 반환
+    }
+//    @GetMapping("/id/check")
+//    public ResponseEntity<UserCheckResponseControllerDto> checkUserId(
+//            @RequestBody UserIdCheckRequestControllerDto userIdCheckRequestControllerDto){
+//        String targetId = userIdCheckRequestControllerDto.getId();
+//        try{
+//            userService.findById(targetId);
+//        } catch (Exception e) {
+//            return ResponseEntity.ok(new UserCheckResponseControllerDto(false));
+//        }
+//        return ResponseEntity.ok(new UserCheckResponseControllerDto(true));
+//        // 이미 존재한다면 true, 아니라면 false 반환
+//    }
+
+    // 닉네임 중복확인
+    @GetMapping("/name/check/{name}")
+    public ResponseEntity<UserCheckResponseControllerDto> checkUserName(
+            @PathVariable String name){
+        try{
+            userService.findUserByName(name);
+        } catch (Exception e) {
+            return ResponseEntity.ok(new UserCheckResponseControllerDto(false));
+        }
+        return ResponseEntity.ok(new UserCheckResponseControllerDto(true));
+        // 이미 존재한다면 true, 아니라면 false 반환
+    }
+
     // TODO GetMapping인지 PostMapping인지 확인
     // 유저 로그인
     @PostMapping("/login")

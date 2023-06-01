@@ -35,6 +35,15 @@ public class UserService {
         return new UserResponseServiceDto(targetUser);
     }
 
+    // 유저 닉네임 조회
+    @Transactional(readOnly = true)
+    public UserResponseServiceDto findUserByName(String name) {
+        User targetUser = userRepository.findUserByName(name)
+                .orElseThrow(()->new CustomException("해당하는 id가 없습니다. name을 다시 확인해주세요!"));
+
+        return new UserResponseServiceDto(targetUser);
+    }
+
     // 유저 회원가입
     @Transactional
     public String register(UserRegisterRequestServiceDto userRegisterRequestServiceDto){
