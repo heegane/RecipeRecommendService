@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
     Optional<Comment> findById(Integer id);
 
-    @Query(value = "SELECT u FROM COMMENT AS u WHERE u.board.id = ?1")
+    @Query(value = "SELECT u FROM comment AS u WHERE u.board.id = ?1")
     Optional<List<Comment>> findCommentsByBoard(Integer id);
 }

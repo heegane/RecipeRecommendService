@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity(name = "INGREDIENT")
+@Entity(name = "ingredient")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Ingredient {
 

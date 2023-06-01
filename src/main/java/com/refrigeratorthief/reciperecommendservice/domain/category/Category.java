@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity(name = "CATEGORY")
+@Entity(name = "category")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Category {
 

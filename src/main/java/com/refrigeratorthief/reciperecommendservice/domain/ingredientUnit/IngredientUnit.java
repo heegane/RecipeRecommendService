@@ -10,7 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity(name = "INGREDIENT_UNIT")
+@Entity(name = "ingredient_unit")
 public class IngredientUnit {
 
     @Id

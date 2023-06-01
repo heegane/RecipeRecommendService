@@ -17,7 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity(name = "BOARD")
+@Entity(name = "board")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Board {
 

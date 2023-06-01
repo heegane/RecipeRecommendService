@@ -15,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity(name = "REFRIGERATOR")
+@Entity(name = "refrigerator")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Refrigerator {
 

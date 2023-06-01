@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity(name = "COMMENT")
+@Entity(name = "comment")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Comment {
 
