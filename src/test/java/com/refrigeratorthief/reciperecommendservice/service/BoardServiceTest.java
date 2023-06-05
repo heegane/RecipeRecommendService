@@ -5,6 +5,7 @@ import com.refrigeratorthief.reciperecommendservice.domain.board.Board;
 import com.refrigeratorthief.reciperecommendservice.domain.board.BoardRepository;
 import com.refrigeratorthief.reciperecommendservice.domain.category.Category;
 import com.refrigeratorthief.reciperecommendservice.domain.category.CategoryRepository;
+import com.refrigeratorthief.reciperecommendservice.domain.comment.CommentRepository;
 import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import com.refrigeratorthief.reciperecommendservice.domain.user.UserRepository;
 import com.refrigeratorthief.reciperecommendservice.dto.board.serviceDto.*;
@@ -36,6 +37,8 @@ class BoardServiceTest {
     private BoardService boardService;
     @Mock
     private CategoryRepository categoryRepository;
+    @Mock
+    private CommentRepository commentRepository;
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -180,6 +183,7 @@ class BoardServiceTest {
         //given
         Board targetBoard = testUtils.getTestBoard();
         doReturn(Optional.of(targetBoard)).when(boardRepository).findById(targetBoard.getId());
+        doReturn(false).when(commentRepository).existsByBoard(targetBoard);
 
         //when
         BoardDeleteServiceResponseDto result = boardService.deleteBoard(targetBoard.getId());
