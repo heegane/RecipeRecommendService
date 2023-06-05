@@ -1,5 +1,6 @@
 package com.refrigeratorthief.reciperecommendservice.service;
 
+import com.refrigeratorthief.reciperecommendservice.domain.comment.CommentRepository;
 import com.refrigeratorthief.reciperecommendservice.domain.ingredient.Ingredient;
 import com.refrigeratorthief.reciperecommendservice.domain.user.User;
 import com.refrigeratorthief.reciperecommendservice.domain.user.UserRepository;
@@ -29,6 +30,9 @@ public class BoardService {
     private final BoardRepository boardRepository;
     @Autowired
     private final CategoryRepository categoryRepository;
+
+    @Autowired
+    private final CommentRepository commentRepository;
     @Autowired
     private final UserRepository userRepository;
     @Autowired
@@ -106,7 +110,14 @@ public class BoardService {
 
         Board targetBoard = boardRepository.findById(id)
                 .orElseThrow(()->new CustomException("해당하는 게시글이 존재하지 않습니다."));
-        boardRepository.delete(targetBoard);
+
+        if(commentRepository.existsByBoard(targetBoard)){
+            commentRepository.deleteAllByBoard(targetBoard);
+            boardRepository.delete(targetBoard);
+        }
+        else{
+            boardRepository.delete(targetBoard);
+        }
 
         return BoardDeleteServiceResponseDto.builder()
                 .id(targetBoard.getId())
