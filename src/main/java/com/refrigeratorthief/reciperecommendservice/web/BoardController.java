@@ -104,8 +104,11 @@ public class BoardController {
 
     // 게시글 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<MessageDto> deleteBoard(@PathVariable Integer id) {
+    public ResponseEntity<MessageDto> deleteBoard(@PathVariable Integer id) throws IOException {
+        Board board = boardRepository.findById(id).orElseThrow();
+
         boardService.deleteBoard(id);
+        boardService.imgDelete(board);
         return ResponseEntity.ok(new MessageDto("해당 게시글을 성공적으로 삭제했습니다."));
     }
 

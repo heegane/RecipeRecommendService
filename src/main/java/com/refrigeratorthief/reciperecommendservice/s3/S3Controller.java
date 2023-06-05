@@ -21,6 +21,6 @@ public class S3Controller {
     @PostMapping()
     public ResponseEntity<MessageDto> updateUserImage(@RequestPart MultipartFile multipartFile) throws IOException {
         s3Uploader.uploadFiles(multipartFile, "ingredient");
-        return ResponseEntity.ok(new MessageDto("재료의 이미지를 성공적으로 저장했습니다."));
+        return ResponseEntity.ok(new MessageDto("이미지를 성공적으로 저장했습니다."));
     }
 }

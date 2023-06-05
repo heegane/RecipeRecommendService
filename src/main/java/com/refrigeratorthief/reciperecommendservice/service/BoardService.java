@@ -154,4 +154,13 @@ public class BoardService {
             board.setImg(s3Uploader.uploadFiles(multipartFile, "board"));
         }
     }
+
+    @Transactional
+    public void imgDelete(Board board) throws IOException {
+        String imgUrl = board.getImg();
+        int firstPosition = imgUrl.lastIndexOf("/") + 1;
+        String filePath = imgUrl.substring(firstPosition);
+
+        s3Uploader.deleteFile(filePath);
+    }
 }
